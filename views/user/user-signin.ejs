@@ -1,0 +1,70 @@
+<%- include('../partials/header', { pageTitle: 'User Sign In', bootstrap: '../css/bootstrap.min.css', fontAwesome: '../css/font-awesome.css', carousal: '../css/owl-carousel.css', tooplate: '../css/tooplate-artxibition.css' }) %>
+
+    <!-- ***** About Us Page ***** -->
+    <div class="page-heading-rent-venue">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Are you ready to RSVP?</h2>
+                    <span>Sign in below and get started!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="rent-venue-application">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="heading-text">
+                        <h4>Current Users</h4>
+                    </div>
+                    <div class="contact-form">
+                        <form id="contact" action="/auth/signin" method="post">
+                          <div class="row">
+                            <div class="col-md-6 col-sm-12">
+                              <fieldset>
+                                <input name="email" type="text" id="email" pattern="[^ @]*@[^ @]*" placeholder="Your Email*" required="">
+                              </fieldset>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                              <fieldset>
+                                <input name="password" type="password" id="password" placeholder="Password*" required="">
+                              </fieldset>
+                            </div>
+                            <div class="col-lg-12">
+                              <fieldset>
+                                <button type="submit" id="form-submit" class="main-dark-button">Sign In</button>
+                              </fieldset>
+                            </div>
+                          </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<%- include('../partials/footer') %>
+
+    <!-- jQuery -->
+    <script src="../scripts/jquery-2.1.0.min.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="../scripts/popper.js"></script>
+    <script src="../scripts/bootstrap.min.js"></script>
+
+    <!-- Plugins -->
+    <script src="../scripts/scrollreveal.min.js"></script>
+    <script src="../scripts/waypoints.min.js"></script>
+    <script src="../scripts/jquery.counterup.min.js"></script>
+    <script src="../scripts/imgfix.min.js"></script> 
+    <script src="../scripts/mixitup.js"></script> 
+    <script src="../scripts/accordions.js"></script>
+    <script src="../scripts/owl-carousel.js"></script>
+    
+    <!-- Global Init -->
+    <script src="../scripts/custom.js"></script>
+
+  </body>
+</html>

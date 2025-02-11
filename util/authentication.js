@@ -4,7 +4,7 @@ function createUserSession(req, user, action) {
     req.session.save(action);
   }
   
-  function destroyVoterAuthSession(req) {
+  function destroyUserAuthSession(req) {
     req.session.uid = null;
     req.session.isAdmin = null;
   }
@@ -12,5 +12,5 @@ function createUserSession(req, user, action) {
   
   module.exports = {
     createUserSession,
-    destroyVoterAuthSession,
+    destroyUserAuthSession,
   };

@@ -22,11 +22,11 @@ function isEmpty(value) {
     );
   }
   
-  function emailMatch(email, confirmEmail) {
-    return email === confirmEmail;
+  function passwordMatch(password, passwordConfirm) {
+    return password === passwordConfirm;
   }
   
   module.exports = {
     userDetailsValid,
-    emailMatch,
+    passwordMatch,
   };
