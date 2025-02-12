@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
-
 
 const adminSchema = mongoose.Schema(
   {
@@ -29,4 +27,4 @@ const adminSchema = mongoose.Schema(
 );
 
 
-module.exports = mongoose.model("User", adminSchema);
+module.exports = mongoose.model("Admin", adminSchema);
