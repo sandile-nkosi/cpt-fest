@@ -22,4 +22,6 @@ authRouter.post('/admin/signup', authController.adminSignUp);
 
 authRouter.post('/admin/signin', authController.adminSignIn);
 
+authRouter.post('/admin/signout', authController.adminSignOut);
+
 module.exports = authRouter;

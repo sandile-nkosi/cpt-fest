@@ -227,6 +227,14 @@ async function adminSignIn(req, res, next) {
   }
 }
 
+//admin sign out
+
+function adminSignOut(req, res) {
+  console.log("Admin signed out");
+  authenticationUtil.destroyAdminAuthSession(req);
+  res.redirect("/");
+}
+
 
 //admin sign up - temp
 async function adminSignUp(req, res, next) {
@@ -277,4 +285,4 @@ async function adminSignUp(req, res, next) {
   }
 }
 
-module.exports = { getSignUp, getSignIn, signUp, signIn, signOut, adminSignUp, getAdminSignIn, adminSignIn };
+module.exports = { getSignUp, getSignIn, signUp, signIn, signOut, adminSignUp, getAdminSignIn, adminSignIn, adminSignIn, adminSignOut };
