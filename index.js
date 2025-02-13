@@ -10,6 +10,7 @@ const path = require('path');
 const authRoutes = require("./routes/authRoute");
 const baseRoutes = require("./routes/baseRoute");
 const eventRoutes = require("./routes/eventRoute");
+const adminRoutes = require("./routes/adminRoute");
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(session(createSessionConfig()));
 app.use('/auth', authRoutes);
 app.use('/', baseRoutes);
 app.use('/events', eventRoutes);
+app.use("/admin", adminRoutes);
 
 
 // connect to database

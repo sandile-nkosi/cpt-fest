@@ -111,8 +111,23 @@ async function editEvent(req, res, next) {
   }
 }
 
+async function archiveEvent(req, res, next) {
+  console.log("archive event");
+  try {
+    const { id } = req.params;
+    const event = await Event.findByIdAndUpdate(id, { isArchived: true }, { new: true });
+
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+
+    res.status(200).redirect("/events/admin/all");
+  } catch (error) {
+    next(error);
+  }
+}
 
 
 
-module.exports = { getEvents, getAllEvents, getAddEvent, addEvent, getEditEvent, editEvent };
+module.exports = { getEvents, getAllEvents, getAddEvent, addEvent, getEditEvent, editEvent, archiveEvent };
 

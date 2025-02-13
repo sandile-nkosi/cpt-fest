@@ -207,6 +207,7 @@ async function adminSignIn(req, res, next) {
       };
 
       req.session.save(()=>{
+        console.log("Admin Signed in");
         res.redirect("/auth/admin/signin");
       });
 

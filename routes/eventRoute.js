@@ -16,6 +16,7 @@ eventRouter.get("/admin/edit/:id", eventController.getEditEvent); // get edit ev
 
 eventRouter.post("/admin/new", imageUploadMiddleware, eventController.addEvent); // post add event
 eventRouter.post("/admin/edit/:id", imageUploadMiddleware, eventController.editEvent); // post edit event
+eventRouter.post("/admin/archive/:id", eventController.archiveEvent); // post archive event
 
 
 
