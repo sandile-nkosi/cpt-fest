@@ -5,6 +5,7 @@ const PORT = process.env.PORT || 3000;
 const bodyParser = require('body-parser');
 const session = require("express-session");
 const createSessionConfig = require("./config/session");
+const path = require('path');
 
 const authRoutes = require("./routes/authRoute");
 const baseRoutes = require("./routes/baseRoute");
@@ -16,7 +17,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
-//app.use("/assets/images", express.static("candidate-data"));
+app.use('/events/assets/images', express.static(path.join(__dirname, 'public/event-data/images')));
 app.use(session(createSessionConfig()));
 
 // Routes

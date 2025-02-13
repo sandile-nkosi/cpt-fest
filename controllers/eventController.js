@@ -10,15 +10,24 @@ function getEvents(req, res) {
 
 async function getAllEvents(req, res) {
   const events = await Event.find({});
-  res.render("admin/admin-events", {events});
+
+  // Modify each event to include a formatted date
+  events.forEach(event => {
+    event.formattedDate = new Date(event.eventDate).toDateString();
+  });
+
+  res.render("admin/admin-events", { events });
+
 }
 
 function getAddEvent(req, res) {
   res.render("admin/new-event");
 }
 
-function getEditEvent(req, res) {
-  res.render("admin/edit-event");
+async function getEditEvent(req, res) {
+  const { id } = req.params;
+  const event = await Event.findById(id);
+  res.render("admin/edit-event", { event });
 }
 
 //admin posts
@@ -96,7 +105,7 @@ async function editEvent(req, res, next) {
     // Save updated event
     await event.save();
 
-    res.status(200).json({ message: "Event updated successfully", event });
+    res.status(200).redirect("/events/admin/all");
   } catch (error) {
     next(error);
   }
@@ -105,5 +114,5 @@ async function editEvent(req, res, next) {
 
 
 
-module.exports = { getEvents, getAllEvents, getAddEvent, addEvent, getEditEvent };
+module.exports = { getEvents, getAllEvents, getAddEvent, addEvent, getEditEvent, editEvent };
 

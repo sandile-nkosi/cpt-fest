@@ -51,18 +51,18 @@
                     <% for (const event of events) {%>
                     <div class="ticket-item">
                         <div class="thumb">
-                            <img src="<%= event.imagePath%>" alt="">
+                            <img src="<%= event.imageUrl%>" alt="">
                         </div>
                             <div class="down-content">
                                 <span>There Are <%= event.maxAttendees - event.rsvps%> Tickets Left For This Show</span>
                                 <h4><%= event.title%></h4>
                                 <ul>
-                                    <li><i class="fa fa-clock-o"></i> Date</li>
+                                    <li><i class="fa fa-clock-o"></i> <%= event.formattedDate + ', ' + event.eventTime %></li>
                                     <li><i class="fa fa-map-marker"></i><%= event.location%></li>
                                 </ul>
                                 <div class="row">
                                     <div class="main-dark-button">
-                                        <a href="<%= event._id%>">Edit Event</a>
+                                        <a href="/events/admin/edit/<%= event._id%>">Edit Event</a>
                                     </div>
                                     <div class="main-dark-button">
                                         <a href="">Archive Event</a>

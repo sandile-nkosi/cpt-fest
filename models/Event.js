@@ -31,6 +31,11 @@ const eventSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    isArchived: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
     eventImage: {
       type: String,
       required: true,

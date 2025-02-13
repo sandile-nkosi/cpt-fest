@@ -12,9 +12,10 @@ eventRouter.get("/", eventController.getEvents);
 //admin
 eventRouter.get("/admin/all", eventController.getAllEvents);
 eventRouter.get("/admin/new", eventController.getAddEvent); // get add event
-eventRouter.get("/admin/edit", eventController.getEditEvent); // get edit event
+eventRouter.get("/admin/edit/:id", eventController.getEditEvent); // get edit event
 
 eventRouter.post("/admin/new", imageUploadMiddleware, eventController.addEvent); // post add event
+eventRouter.post("/admin/edit/:id", imageUploadMiddleware, eventController.editEvent); // post edit event
 
 
 
