@@ -27,6 +27,7 @@
                     <ul>
                         <li><i class="fa fa-clock-o"></i> <%= event.eventTime %></li>
                         <li><i class="fa fa-map-marker"></i><%= event.location %></li>
+                        <li><p>⭐ Average Rating: <%= event.averageRating %> / 5</p></li>
                     </ul>
                     <div class="quantity-content">
                         <div class="left-content">
@@ -35,7 +36,11 @@
                     </div>
                     <div class="total">
                         <div class="main-dark-button">
-                            <button class="rsvp-btn" data-event-id="<%= event._id %>">Click to RSVP</button>
+                            <% if (isRSVPed) { %>
+                                <button class="rsvp-btn" data-event-id="<%= event._id %>" data-rsvped="true">Cancel RSVP</button>
+                            <% } else { %>
+                                <button class="rsvp-btn" data-event-id="<%= event._id %>" data-rsvped="false">Click to RSVP</button>
+                            <% } %>
                         </div>
                     </div>
                     <div class="warn">
@@ -43,6 +48,46 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="contact-form">
+            <form id="contact">
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <fieldset>
+                    <label for="rating">Rate this event (1-5):</label>
+                    <input type="number" id="rating" name="rating" min="1" max="5" required>
+                  </fieldset>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <fieldset>
+                    <label for="comment">Leave a comment:</label>
+                    <textarea id="comment" name="comment"></textarea>
+                  </fieldset>
+                </div>
+                <div class="col-lg-12">
+                  <fieldset>
+                    <button type="submit" id="form-submit" class="main-dark-button">Submit Comment</button>
+                  </fieldset>
+                </div>
+              </div>
+            </form>
+        </div>
+        <div>
+            <h4>Ratings & Comments</h4>
+                <ul>
+                    <% event.ratings.forEach(rating => { %>
+                        <li>
+                            <strong>User:</strong> <%= rating.user.fullName %>
+                            <br>
+                            <strong>Rating:</strong> <%= rating.rating %> ⭐
+                            <br>
+                            <strong>Comment:</strong> <%= rating.comment %>
+                            <br>
+                            <em><%= new Date(rating.createdAt).toLocaleString() %></em>
+                        </li>
+                        <hr>
+                    <% }); %>
+                </ul>
         </div>
     </div>
 </div>
@@ -68,24 +113,31 @@
 <!-- Global Init -->
 <script src="../../scripts/custom.js"></script>
 
+<script src="../../scripts/events.js"></script>
+
 <script>
     $(document).ready(function() {
-        // Click event for RSVP button
-        $('.rsvp-btn').on('click', function() {
-            const eventId = $(this).data('event-id');  // Get the event ID from the button's data attribute
-            const url = `/user/events/${eventId}/rsvp`;     // Construct the URL dynamically
+        $(".rsvp-btn").on("click", function() {
+            const button = $(this);
+            const eventId = button.data("event-id");
+            const isRSVPed = button.data("rsvped"); // Boolean status
 
             $.ajax({
-                url: url,  // Use the dynamic RSVP URL
-                method: 'POST',
-                contentType: 'application/json',
+                url: `/user/events/${eventId}/rsvp`,
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ action: isRSVPed ? "cancel" : "rsvp" }), // Send correct action
                 success: function(response) {
-                    alert('You have successfully RSVP\'d to the event!');
-                    // Optionally update the UI to show the user has RSVP'd
-                    $('.rsvp-btn').text('RSVP\'d').attr('disabled', true);
+                    if (response.isRSVPed) {
+                        button.text("Cancel RSVP").data("rsvped", true);
+                        alert("You have successfully RSVP'd to the event!");
+                    } else {
+                        button.text("Click to RSVP").data("rsvped", false);
+                        alert("You have successfully canceled your RSVP.");
+                    }
                 },
-                error: function(xhr, status, error) {
-                    alert('Error: ' + xhr.responseText);
+                error: function(xhr) {
+                    alert("Error: " + xhr.responseText);
                 }
             });
         });

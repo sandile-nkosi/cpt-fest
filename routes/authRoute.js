@@ -14,7 +14,7 @@ authRouter.post('/signup', authController.signUp);
 
 authRouter.post('/signin', authController.signIn);
 
-authRouter.post("/signout", authController.signOut);
+authRouter.post("/user/signout", authController.signOut);
 
 //post routes - admin
 

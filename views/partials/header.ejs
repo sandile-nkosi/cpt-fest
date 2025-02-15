@@ -49,23 +49,32 @@ https://www.tooplate.com/view/2125-artxibition
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-sm-6">
-                    
                 </div>
-                <div class="col-lg-6 col-sm-6">
-                    <div class="text-button">
-                        <% if (admin) { %>
-                            <form action="/auth/admin/signout" method="POST">
-                                <button>Admin Sign Out <i class="fa fa-arrow-right"></i></button>
-                            </form>
-                        <% } else { %>
-                            <a href="/auth/admin/signin">Admin Sign In <i class="fa fa-arrow-right"></i></a>
-                        <% } %>                                                                      
+                <% if (!user) {%>
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="text-button">
+                            <% if (admin) { %>
+                                <form action="/auth/admin/signout" method="POST">
+                                    <button>Admin Sign Out <i class="fa fa-arrow-right"></i></button>
+                                </form>
+                            <% } else { %>
+                                <a href="/auth/admin/signin">Admin Sign In <i class="fa fa-arrow-right"></i></a>
+                            <% } %>                                                                      
+                        </div>
+                    </div>   
+                <%} else if(user) {%>
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="text-button">
+                                <form action="/auth/user/signout" method="POST">
+                                    <button>Sign Out <i class="fa fa-arrow-right"></i></button>
+                                </form>
+                            <% } %>                                                                      
+                        </div>
                     </div>
-                </div>
             </div>
         </div>
     </div>
-    
+ 
     <!-- ***** Header Area Start ***** -->
     <header class="header-area header-sticky">
         <div class="container">
@@ -82,7 +91,9 @@ https://www.tooplate.com/view/2125-artxibition
                                 <li><a href="/admin/events/all">Events</a></li>
                                 <li><a href="/admin/events/new">Add New Event</a></li>
                             <% } else if (user) {%>
-                                user
+                                <li><a href="/" class="active">Home</a></li>
+                                <li><a href="/user/events">All Events</a></li>
+                                <li><a href="/">My Events</a></li>
                             <%} else {%>
                                 <li><a href="/" class="active">Home</a></li>
                                 <li><a href="/events">Shows & Events</a></li>

@@ -8,6 +8,13 @@ const Admin = require("../models/Admin");
 //get routes
 
 function getSignUp(req, res) {
+  // Check if req.session.user exists before accessing uid
+  const userId = req.session.user ? req.session.user.uid : null;
+
+  if (userId) {
+    return res.redirect("/user/events");
+  }
+
   let sessionData = sessionFlash.getSessionData(req);
 
   if (!sessionData) {
@@ -19,12 +26,21 @@ function getSignUp(req, res) {
       city: "",
     };
   }
+
   res.render("user/user-signup", { sessionData });
 }
 
+
 function getSignIn(req, res) {
+  // Check if `req.session.user` exists before accessing `uid`
+  const userId = req.session.user ? req.session.user.uid : null;
+
+  if (userId) {
+    return res.redirect("/user/events");
+  }
+
   res.render("user/user-signin");
-};
+}
 
 function getAdminSignIn(req, res) {
   res.render("admin/admin-signin");

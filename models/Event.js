@@ -21,6 +21,15 @@ const eventSchema = mongoose.Schema(
       type: Date,
       required: true,
     },
+    ratings: [
+      {
+          user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+          rating: { type: Number, min: 1, max: 5 },
+          comment: String,
+          createdAt: { type: Date, default: Date.now }
+      }
+    ]
+    ,
     eventTime: {
       type: String,
       required: true,
