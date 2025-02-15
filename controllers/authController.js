@@ -151,11 +151,11 @@ async function signIn(req, res, next) {
     }
 
     req.session.user = {
-      id: existingUser._id,
+      uid: existingUser._id,
       email: existingUser.email,
     };
     req.session.save(() => {
-      res.redirect("/events");
+      res.redirect("/user/events");
     });
   } catch (err) {
     console.log(err);
@@ -207,7 +207,6 @@ async function adminSignIn(req, res, next) {
       };
 
       req.session.save(()=>{
-        console.log("Admin Signed in");
         res.redirect("/auth/admin/signin");
       });
 
@@ -215,7 +214,7 @@ async function adminSignIn(req, res, next) {
     }
 
     req.session.admin = {
-      id: existingAdmin._id,
+      uid: existingAdmin._id,
       email: existingAdmin.email,
     };
     req.session.save(() => {
@@ -230,11 +229,9 @@ async function adminSignIn(req, res, next) {
 //admin sign out
 
 function adminSignOut(req, res) {
-  console.log("Admin signed out");
   authenticationUtil.destroyAdminAuthSession(req);
   res.redirect("/");
 }
-
 
 //admin sign up - temp
 async function adminSignUp(req, res, next) {

@@ -1,29 +1,28 @@
-function createUserSession(req, user, action) {
-    req.session.uid = user._id.toString();
-    req.session.isAdmin = user.isAdmin;
-    req.session.save(action);
-  }
-  
-  function destroyUserAuthSession(req) {
-    req.session.uid = null;
-    req.session.isAdmin = null;
-  }
+function createSession(req, user, action) {
+  req.session.uid = user._id.toString();
+  req.session.isAdmin = !!user.isAdmin;
 
-  function createAdminSession(req, admin, action) {
-    req.session.uid = admin._id.toString();
-    req.session.isAdmin = admin.isAdmin;
-    req.session.save(action);
-  }
-  
-  function destroyAdminAuthSession(req) {
-    req.session.uid = null;
-    req.session.isAdmin = null;
-  }
-  
-  
-  module.exports = {
-    createUserSession,
-    destroyUserAuthSession,
-    createAdminSession,
-    destroyAdminAuthSession
-  };
+  req.session.save(err => {
+    if (err) {
+      console.error("Session save error:", err);
+    }
+    action && action(); // Ensures action (e.g., redirect) happens after session is saved
+  });
+}
+
+function destroySession(req, action) {
+  req.session.destroy(err => {
+    if (err) {
+      console.error("Error destroying session:", err);
+      return action && action(err);
+    }
+    action && action(); // Ensures action (e.g., redirect) happens after session is destroyed
+  });
+}
+
+module.exports = {
+  createUserSession: createSession,
+  destroyUserAuthSession: destroySession,
+  createAdminSession: createSession,
+  destroyAdminAuthSession: destroySession
+};
