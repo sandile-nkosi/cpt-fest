@@ -93,7 +93,7 @@ async function addEvent(req, res, next) {  // Added next parameter
       });
   
       if (event) {
-        res.status(201).redirect("/events/admin/all");
+        res.status(201).redirect("/admin/events/all");
       } else {
         res.status(400).json({ error: "Failed to create event" });
       }
@@ -139,7 +139,7 @@ async function addEvent(req, res, next) {  // Added next parameter
       // Save updated event
       await event.save();
   
-      res.status(200).redirect("/events/admin/all");
+      res.status(200).redirect("/admin/events/all");
     } catch (error) {
       next(error);
     }
@@ -155,7 +155,7 @@ async function addEvent(req, res, next) {  // Added next parameter
         return res.status(404).json({ error: "Event not found" });
       }
   
-      res.status(200).redirect("/events/admin/all");
+      res.status(200).redirect("/admin/events/all");
     } catch (error) {
       next(error);
     }

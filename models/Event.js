@@ -14,11 +14,9 @@ const eventSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    rsvps: {
-        type: Number,
-        required: true,
-        default: 0,
-    },
+    rsvps: [{ 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: "User" }],
     eventDate: {
       type: Date,
       required: true,
@@ -53,6 +51,5 @@ const eventSchema = mongoose.Schema(
     timestamps: true,
   }
 );
-
 
 module.exports = mongoose.model("Event", eventSchema);

@@ -1,0 +1,96 @@
+<%- include('../partials/header', { pageTitle: 'All Events', bootstrap: '../../css/bootstrap.min.css', fontAwesome: '../../css/font-awesome.css', carousal: '../../css/owl-carousel.css', tooplate: '../../css/tooplate-artxibition.css' }) %>
+
+<!-- ***** About Us Page ***** -->
+<div class="page-heading-shows-events">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>RSVP Now!</h2>
+                <span>Check out upcoming and past shows & events and RSVP right now.</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ticket-details-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="left-image">
+                    <img src="<%= event.imageUrl %>" alt="">
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="right-content">
+                    <h4><%= event.title %></h4>
+                    <span><%= event.maxAttendees - event.rsvps.length %> Tickets still available</span>
+                    <ul>
+                        <li><i class="fa fa-clock-o"></i> <%= event.eventTime %></li>
+                        <li><i class="fa fa-map-marker"></i><%= event.location %></li>
+                    </ul>
+                    <div class="quantity-content">
+                        <div class="left-content">
+                            <p><%= event.description %></p>
+                        </div>
+                    </div>
+                    <div class="total">
+                        <div class="main-dark-button">
+                            <button class="rsvp-btn" data-event-id="<%= event._id %>">Click to RSVP</button>
+                        </div>
+                    </div>
+                    <div class="warn">
+                        <p>*Each user needs to RSVP to attend an event</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>
+
+<!-- jQuery -->
+<script src="../../scripts/jquery-2.1.0.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="../../scripts/popper.js"></script>
+<script src="../../scripts/bootstrap.min.js"></script>
+
+<!-- Plugins -->
+<script src="../../scripts/scrollreveal.min.js"></script>
+<script src="../../scripts/waypoints.min.js"></script>
+<script src="../../scripts/jquery.counterup.min.js"></script>
+<script src="../../scripts/imgfix.min.js"></script> 
+<script src="../../scripts/mixitup.js"></script> 
+<script src="../../scripts/accordions.js"></script>
+<script src="../../scripts/owl-carousel.js"></script>
+
+<!-- Global Init -->
+<script src="../../scripts/custom.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Click event for RSVP button
+        $('.rsvp-btn').on('click', function() {
+            const eventId = $(this).data('event-id');  // Get the event ID from the button's data attribute
+            const url = `/user/events/${eventId}/rsvp`;     // Construct the URL dynamically
+
+            $.ajax({
+                url: url,  // Use the dynamic RSVP URL
+                method: 'POST',
+                contentType: 'application/json',
+                success: function(response) {
+                    alert('You have successfully RSVP\'d to the event!');
+                    // Optionally update the UI to show the user has RSVP'd
+                    $('.rsvp-btn').text('RSVP\'d').attr('disabled', true);
+                },
+                error: function(xhr, status, error) {
+                    alert('Error: ' + xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

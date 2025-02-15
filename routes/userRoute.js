@@ -5,7 +5,10 @@ const userRouter = express.Router();
 
 //user
 
-userRouter.get("/events", userController.getEvents);
+userRouter.get("/events", userController.getAllEvents);
+userRouter.get("/events/:eventId", userController.getEvent);
+
+userRouter.post("/events/:eventId/rsvp", userController.rsvpToEvent);
 
 
 
