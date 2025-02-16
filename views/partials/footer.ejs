@@ -1,30 +1,4 @@
-        <!-- *** Subscribe *** -->
-        <div class="subscribe">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <h4>Subscribe Our Newsletter:</h4>
-                    </div>
-                    <div class="col-lg-8">
-                        <form id="subscribe" action="" method="get">
-                            <div class="row">
-                              <div class="col-lg-9">
-                                <fieldset>
-                                  <input name="email" type="text" id="email" pattern="[^ @]*@[^ @]*" placeholder="Your Email Address" required="">
-                                </fieldset>
-                              </div>
-                              <div class="col-lg-3">
-                                <fieldset>
-                                  <button type="submit" id="form-submit" class="main-dark-button">Submit</button>
-                                </fieldset>
-                              </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    <!-- *** Footer *** -->
+<!-- *** Footer *** -->
     <footer>
         <div class="container">
             <div class="row">
@@ -37,11 +11,20 @@
                             <div class="col-lg-6">
                                 <div class="menu">
                                     <ul>
-                                        <li><a href="/" class="active">Home</a></li>
-                                        <li><a href="/events">Shows & Events</a></li>
-                                        <li><a href="/auth/signin">Sign In</a></li>
-                                        <li><a href="/auth/signup">Sign Up</a></li> 
-                                        <li><a href="tickets.html">Tickets</a></li> 
+                                        <% if (admin) {%>
+                                            <li><a href="/admin/dashboard" class="active">Dashboard</a></li>
+                                            <li><a href="/admin/events/all">Events</a></li>
+                                            <li><a href="/admin/events/new">Add New Event</a></li>
+                                        <% } else if (user) {%>
+                                            <li><a href="/" class="active">Home</a></li>
+                                            <li><a href="/user/events">All Events</a></li>
+                                            <li><a href="/user/events/own">My Events</a></li>
+                                        <%} else {%>
+                                            <li><a href="/" class="active">Home</a></li>
+                                            <li><a href="/user/events">Shows & Events</a></li>
+                                            <li><a href="/auth/signin">Sign In</a></li>
+                                            <li><a href="/auth/signup">Sign Up</a></li> 
+                                        <%}%> 
                                     </ul>
                                 </div>
                             </div>

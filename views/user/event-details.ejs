@@ -1,4 +1,10 @@
-<%- include('../partials/header', { pageTitle: 'All Events', bootstrap: '../../css/bootstrap.min.css', fontAwesome: '../../css/font-awesome.css', carousal: '../../css/owl-carousel.css', tooplate: '../../css/tooplate-artxibition.css' }) %>
+<%- include('../partials/header', { 
+    pageTitle: event.title, 
+    bootstrap: '../../css/bootstrap.min.css', 
+    fontAwesome: '../../css/font-awesome.css', 
+    carousal: '../../css/owl-carousel.css', 
+    tooplate: '../../css/tooplate-artxibition.css' 
+}) %>
 
 <!-- ***** About Us Page ***** -->
 <div class="page-heading-shows-events">
@@ -36,11 +42,15 @@
                     </div>
                     <div class="total">
                         <div class="main-dark-button">
-                            <% if (isRSVPed) { %>
-                                <button class="rsvp-btn" data-event-id="<%= event._id %>" data-rsvped="true">Cancel RSVP</button>
-                            <% } else { %>
-                                <button class="rsvp-btn" data-event-id="<%= event._id %>" data-rsvped="false">Click to RSVP</button>
-                            <% } %>
+                            <% if (user == null) {%>
+                                <button class="rsvp-btn" disabled>Sign In to RSVP</button>
+                            <%}else {%>
+                                <% if (isRSVPed) { %>
+                                    <button class="rsvp-btn" data-event-id="<%= event._id %>" data-rsvped="true">Cancel RSVP</button>
+                                <% } else { %>
+                                    <button class="rsvp-btn" data-event-id="<%= event._id %>" data-rsvped="false">Click to RSVP</button>
+                                <% } %>
+                            <%}%>
                         </div>
                     </div>
                     <div class="warn">
@@ -49,36 +59,11 @@
                 </div>
             </div>
         </div>
-        <div class="contact-form">
-            <form id="contact">
-              <div class="row">
-                <div class="col-md-6 col-sm-12">
-                  <fieldset>
-                    <label for="rating">Rate this event (1-5):</label>
-                    <input type="number" id="rating" name="rating" min="1" max="5" required>
-                  </fieldset>
-                </div>
-                <div class="col-md-6 col-sm-12">
-                  <fieldset>
-                    <label for="comment">Leave a comment:</label>
-                    <textarea id="comment" name="comment"></textarea>
-                  </fieldset>
-                </div>
-                <div class="col-lg-12">
-                  <fieldset>
-                    <button type="submit" id="form-submit" class="main-dark-button">Submit Comment</button>
-                  </fieldset>
-                </div>
-              </div>
-            </form>
-        </div>
         <div>
             <h4>Ratings & Comments</h4>
                 <ul>
                     <% event.ratings.forEach(rating => { %>
                         <li>
-                            <strong>User:</strong> <%= rating.user.fullName %>
-                            <br>
                             <strong>Rating:</strong> <%= rating.rating %> ⭐
                             <br>
                             <strong>Comment:</strong> <%= rating.comment %>
@@ -113,7 +98,6 @@
 <!-- Global Init -->
 <script src="../../scripts/custom.js"></script>
 
-<script src="../../scripts/events.js"></script>
 
 <script>
     $(document).ready(function() {

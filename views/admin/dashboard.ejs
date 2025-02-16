@@ -15,7 +15,38 @@
                 <div class="col-lg-12">
                     <div class="heading">
                         <h2>Admin Dashboard</h2>
-                    
+                        <div class="container mt-5">
+                            <h2 class="text-center">Event Statistics</h2>
+                            <table class="table table-bordered mt-4">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Date</th>
+                                        <th>Location</th>
+                                        <th>RSVPs</th>
+                                        <th>Average Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% events.forEach(event => { %>
+                                        <tr>
+                                            <td><%= event.title %></td>
+                                            <td><%= new Date(event.eventDate).toDateString() %></td>
+                                            <td><%= event.location %></td>
+                                            <td><%= event.rsvps.length %> / <%= event.maxAttendees %></td>
+                                            <td>
+                                                <% 
+                                                    let avgRating = event.ratings.length > 0 ? 
+                                                        (event.ratings.reduce((acc, r) => acc + r.rating, 0) / event.ratings.length).toFixed(1) 
+                                                        : "No ratings yet"; 
+                                                %>
+                                                <%= avgRating %>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,23 +1,17 @@
-document.getElementById("ratingForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const eventId = "<%= event._id %>"; // Get event ID
-    const rating = document.getElementById("rating").value;
-    const comment = document.getElementById("comment").value;
-
-    fetch(`/user/events/${eventId}/rate`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rating, comment })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            alert(data.error);
-        } else {
-            alert("Rating submitted!");
-            location.reload(); // Refresh page to display new rating
+//index ejs
+$(document).ready(function () {
+    // Initialize Owl Carousel after dynamically adding items
+    $(".owl-show-events").owlCarousel({
+        loop: true,
+        margin: 10,
+        nav: true,
+        autoplay: true,
+        autoplayTimeout: 3000,
+        responsive: {
+            0: { items: 1 },
+            600: { items: 3 },
+            1000: { items: 4 }
         }
-    })
-    .catch(error => console.error("Error:", error));
+    });
 });
+

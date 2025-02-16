@@ -3,6 +3,7 @@ const Event = require("../models/Event");
 
 async function getDashboard(req, res) { 
     const adminId = req.session.admin.uid;  // Ensure session contains admin ID
+    const events = await Event.find().populate("rsvps", "fullName email").populate("ratings.user", "fullName email");
 
     if (!adminId) {
         return res.redirect("/auth/admin/signin");
@@ -16,7 +17,7 @@ async function getDashboard(req, res) {
 
     res.locals.admin = admin; // Now available in all views
 
-    res.render("admin/dashboard", { admin }); // Passing explicitly for dashboard as well
+    res.render("admin/dashboard", { admin, events }); // Passing explicitly for dashboard as well
 }
 
 //admin gets

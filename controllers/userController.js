@@ -4,20 +4,12 @@ const RSVP = require("../models/RSVPs");
 const mongoose = require("mongoose");
 
 async function getAllEvents(req, res) {
-    const userId = req.session.user.uid;  // Ensure session contains user ID
+    const userId = req.session.user ? req.session.user.uid : null;  // Check if user is logged in
     const events = await Event.find({});
 
-    if (!userId) {
-        return res.redirect("/auth/user/signin");
-    }
+    const user = userId ? await User.findById(userId).exec() : null;  // Only fetch user if logged in
 
-    const user = await User.findById(userId).exec();   
-
-    if (!user) {
-        return res.redirect("/auth/user/signin");
-    }
-
-    res.locals.user = user; // Now available in all views
+    res.locals.user = user; // Available in all views
 
     // Modify each event to include a formatted date and calculate open spaces
     events.forEach(event => {
@@ -32,23 +24,14 @@ async function getAllEvents(req, res) {
 }
 
 async function getEvent(req, res) {
-    const userId = req.session.user.uid;  // Ensure session contains user ID
+    const userId = req.session.user ? req.session.user.uid : null;  // Check if user is logged in
     const eventId = req.params.eventId;   // Get eventId from the request parameters
 
-    if (!userId) {
-        return res.redirect("/auth/user/signin");
-    }
+    const user = userId ? await User.findById(userId).exec() : null;  // Only fetch user if logged in
 
-    const user = await User.findById(userId).exec();   
-
-    if (!user) {
-        return res.redirect("/auth/user/signin");
-    }
-
-    res.locals.user = user; // Now available in all views
+    res.locals.user = user; // Available in all views
 
     const event = await Event.findById(eventId).exec();  // Fetch the event by ID
-    const isRSVPed = event.rsvps.includes(userId);
 
     if (!event) {
         return res.status(404).send("Event not found");  // Handle event not found scenario
@@ -64,8 +47,11 @@ async function getEvent(req, res) {
 
     event.averageRating = calculateAverageRating(event.ratings);
 
+    const isRSVPed = user ? event.rsvps.includes(userId) : false; // Only check RSVP if user is logged in
+
     res.render("user/event-details", { user, event, isRSVPed });  // Passing the event to the view
 }
+
 
 async function toggleRSVP(req, res) {
     const userId = req.session.user ? req.session.user.uid : null;
@@ -163,11 +149,30 @@ async function eventRating(req, res) {
         event.ratings.push({ user: userId, rating, comment });
         await event.save();
 
-        res.json({ message: "Rating submitted successfully", ratings: event.ratings });
+        res.status(201).redirect('/events/own');
     } catch (error) {
         console.error("Rating Error:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 }
 
-module.exports = { getAllEvents, getEvent, toggleRSVP, eventRating };  // Exporting the functions to be used in routes
+async function getUserRSVPs(req, res) {
+    try {
+        const userId = req.session.user ? req.session.user.uid : null;
+        if (!userId) {
+            return res.redirect("/auth/user/signin");
+        }
+
+        // Fetch events where user has RSVP'd
+        const rsvpEvents = await Event.find({ rsvps: userId })
+            .populate("rsvps", "fullName email")
+            .populate("ratings.user", "fullName email");
+
+        res.render("user/user-events", { events: rsvpEvents });
+    } catch (error) {
+        console.error("Error fetching RSVP'd events:", error);
+        res.status(500).send("Error fetching your RSVP'd events.");
+    }
+}
+
+module.exports = { getAllEvents, getEvent, toggleRSVP, eventRating, getUserRSVPs };  // Exporting the functions to be used in routes

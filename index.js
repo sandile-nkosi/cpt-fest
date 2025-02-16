@@ -8,7 +8,7 @@ const createSessionConfig = require("./config/session");
 const path = require('path');
 
 const authRoutes = require("./routes/authRoute");
-const baseRoutes = require("./routes/baseRoute");
+const eventRoutes = require("./routes/eventRoute");
 const userRoutes = require("./routes/userRoute");
 const adminRoutes = require("./routes/adminRoute");
 
@@ -42,7 +42,7 @@ app.use((req, res, next) => {
   next();
 });
 app.use('/auth', authRoutes);
-app.use('/', baseRoutes);
+app.use('/', eventRoutes);
 app.use('/user', userRoutes);
 app.use("/admin", adminRoutes);
 
