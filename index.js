@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const session = require("express-session");
 const createSessionConfig = require("./config/session");
 const path = require('path');
+const apiKey = process.env.GOOGLE_MAPS_API_KEY;
 
 const authRoutes = require("./routes/authRoute");
 const eventRoutes = require("./routes/eventRoute");

@@ -6,6 +6,34 @@
     tooplate: '../../css/tooplate-artxibition.css' 
 }) %>
 
+<script>
+    // Make sure initMap is attached to the global window object
+    window.initMap = function() {
+      var eventLocation = { 
+        lat: parseFloat("<%= event.latitude %>"), 
+        lng: parseFloat("<%= event.longitude %>") 
+      };
+  
+      var map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 14,
+        center: eventLocation
+      });
+  
+      new google.maps.Marker({
+        position: eventLocation,
+        map: map,
+        title: "<%= event.title %>"
+      });
+    };
+  </script>
+  
+  <script 
+    src="https://maps.googleapis.com/maps/api/js?key=<%= process.env.GOOGLE_MAPS_API_KEY %>&callback=initMap&loading=async" 
+    async 
+    defer>
+  </script>
+  
+
 <!-- ***** About Us Page ***** -->
 <div class="page-heading-shows-events">
     <div class="container">
@@ -25,6 +53,22 @@
                 <div class="left-image">
                     <img src="<%= event.imageUrl %>" alt="">
                 </div>
+                <br>
+                <div>
+                    <h4>Ratings & Comments</h4>
+                        <ul>
+                            <% event.ratings.forEach(rating => { %>
+                                <li>
+                                    <strong>Rating:</strong> <%= rating.rating %> ⭐
+                                    <br>
+                                    <strong>Comment:</strong> <%= rating.comment %>
+                                    <br>
+                                    <em><%= new Date(rating.createdAt).toLocaleString() %></em>
+                                </li>
+                                <hr>
+                            <% }); %>
+                        </ul>
+                </div>
             </div>
             <div class="col-lg-4">
                 <div class="right-content">
@@ -33,7 +77,16 @@
                     <ul>
                         <li><i class="fa fa-clock-o"></i> <%= event.eventTime %></li>
                         <li><i class="fa fa-map-marker"></i><%= event.location %></li>
-                        <li><p>⭐ Average Rating: <%= event.averageRating %> / 5</p></li>
+                        <li>
+                            <div id="map" style="height: 400px; width: 100%;"></div>
+                        </li>
+                        <li>
+                            <% if (event.averageRating <= 0) {%>
+                                <p>⭐ Average Rating: No ratings yet</p>
+                            <%} else {%>
+                                <p>⭐ Average Rating: <%= event.averageRating %> / 5</p>  
+                            <%}%>
+                        </li>
                     </ul>
                     <div class="quantity-content">
                         <div class="left-content">
@@ -58,21 +111,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div>
-            <h4>Ratings & Comments</h4>
-                <ul>
-                    <% event.ratings.forEach(rating => { %>
-                        <li>
-                            <strong>Rating:</strong> <%= rating.rating %> ⭐
-                            <br>
-                            <strong>Comment:</strong> <%= rating.comment %>
-                            <br>
-                            <em><%= new Date(rating.createdAt).toLocaleString() %></em>
-                        </li>
-                        <hr>
-                    <% }); %>
-                </ul>
         </div>
     </div>
 </div>

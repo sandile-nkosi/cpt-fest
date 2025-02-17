@@ -5,6 +5,7 @@ const sessionFlash = require("../util/session-flash");
 const bcrypt = require("bcryptjs");
 const Admin = require("../models/Admin");
 
+
 //get routes
 
 function getSignUp(req, res) {
@@ -109,6 +110,36 @@ async function signUp(req, res, next) {
       });
 
       if (user) {
+        
+        const mailOptions = {
+          from: "VentPass Events <sankosi.uct@gmail.com>",
+          to: `${user.email}`,
+          subject: `🎉 Welcome to VentPass, ${user.fullName}!`,
+          text: "Test",
+          html: `
+            <div style="max-width: 600px; margin: auto; padding: 20px; font-family: Arial, sans-serif; background-color: #f9f9f9; border-radius: 8px; text-align: center; border: 1px solid #ddd;">
+  
+            <h2 style="color: #007bff;">Welcome to VentPass, ${user.fullName}! 🎉</h2>
+
+            <p style="font-size: 16px; color: #333; line-height: 1.6;">
+              We're thrilled to have you on board! Your account has been successfully created, and you're now part of the VentPass community.
+            </p>
+
+            <p style="font-size: 14px; color: #777; margin-top: 20px;">
+              Need help? Contact us at <a href="mailto:support@ventpass.com" style="color: #007bff; text-decoration: none;">support@ventpass.com</a>
+            </p>
+
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #ddd;">
+            <p style="font-size: 14px; color: #777;">
+              VentPass Events<br>
+              &copy; 2025 VentPass. All rights reserved.
+            </p>
+          </div>
+          `,
+        };
+        
+        sendMail(mailOptions);
+
         res.status(201).redirect("/auth/signin");
       } else {
         console.log("Not created");

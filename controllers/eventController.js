@@ -2,9 +2,10 @@ const Event = require("../models/Event");
 
 async function getIndex(req, res) {
   try {
-    const events = await Event.find(); // Fetch all events from DB
-    const limitedEvents = await Event.find().limit(3);
-    const singleEvents = await Event.find().limit(1);
+    // Find events where isArchived is false
+    const events = await Event.find({ isArchived: false });
+    const limitedEvents = await Event.find({ isArchived: false }).limit(3);
+    const singleEvents = await Event.find({ isArchived: false }).limit(1);
 
     limitedEvents.forEach(limitedEvent => {
       limitedEvent.formattedDate = new Date(limitedEvent.eventDate).toDateString();
