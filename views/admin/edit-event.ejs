@@ -28,12 +28,8 @@
                             </div>
                             <div class="col-md-6 col-sm-12">
                                 <fieldset>
-                                    <input name="eventDate" type="date" id="eventDate" required value="<%= event.eventDate.toISOString().split('T')[0] %>">
-                                </fieldset>
-                            </div>
-                            <div class="col-md-6 col-sm-12">
-                                <fieldset>
-                                    <input name="eventTime" type="time" id="eventTime" required value="<%= event.eventTime %>">
+                                    <input name="eventDate" type="datetime-local" id="eventDate" 
+                                    value="<%= event.eventDateTime.toISOString().slice(0, 16) %>">
                                 </fieldset>
                             </div>
                             <div class="col-md-6 col-sm-12">

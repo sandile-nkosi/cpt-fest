@@ -138,6 +138,7 @@ async function toggleRSVP(req, res) {
         .json({ error: "RSVP changes are not allowed after the event starts" });
     }
 
+
     const hasRSVPed = event.rsvps.includes(userId);
 
     if (hasRSVPed) {
@@ -171,8 +172,7 @@ async function toggleRSVP(req, res) {
                 </p>
           
                 <p style="font-size: 16px; color: #555; line-height: 1.6;">
-                  📅 <strong>Event Date:</strong> ${event.eventDate} <br>
-                  🕒 <strong>Time:</strong> ${event.eventTime} <br>
+                  📅 🕒 <strong>Event Date and Time:</strong> ${event.eventDateTime} <br>
                   📍 <strong>Location:</strong> ${event.location}
                 </p>
           
@@ -240,8 +240,7 @@ async function toggleRSVP(req, res) {
         </p>
 
         <p style="font-size: 16px; color: #555; line-height: 1.6;">
-            📅 <strong>Date:</strong> ${event.eventDate} <br>
-            🕒 <strong>Time:</strong> ${event.eventTime} <br>
+            📅 🕒 <strong>Date and Time:</strong> ${event.eventDateTime} <br>
             📍 <strong>Location:</strong> ${event.location}
         </p>
 
@@ -319,9 +318,17 @@ async function getUserRSVPs(req, res) {
     }
 
     // Fetch events where user has RSVP'd
-    const rsvpEvents = await Event.find({ rsvps: userId })
+    let rsvpEvents = await Event.find({ rsvps: userId })
       .populate("rsvps", "fullName email")
       .populate("ratings.user", "fullName email");
+
+    // Add a `hasRating` boolean to each event
+    rsvpEvents = await Promise.all(
+      rsvpEvents.map(async (event) => {
+        const hasRating = await Event.exists({ _id: event._id, "ratings.user": userId });
+        return { ...event.toObject(), hasRating: !!hasRating }; // Ensure boolean return
+      })
+    );
 
     res.render("user/user-events", { events: rsvpEvents });
   } catch (error) {
@@ -329,6 +336,7 @@ async function getUserRSVPs(req, res) {
     res.status(500).send("Error fetching your RSVP'd events.");
   }
 }
+
 
 module.exports = {
   getAllEvents,

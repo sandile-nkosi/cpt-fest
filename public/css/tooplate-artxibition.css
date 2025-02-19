@@ -621,6 +621,22 @@ banner
   margin-bottom: 30px;
 }
 
+.main-banner h3 {
+  font-size: 40px;
+  font-weight: 700;
+  color: #fff;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.main-banner h4 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
 .main-banner .next-show {
   position: absolute;
   top: -165px;

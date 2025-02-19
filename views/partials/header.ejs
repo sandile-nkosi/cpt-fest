@@ -86,21 +86,21 @@ https://www.tooplate.com/view/2125-artxibition
                         <!-- ***** Logo End ***** -->
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
-                            <% if (admin) {%>
-                                <li><a href="/admin/dashboard" class="active">Dashboard</a></li>
-                                <li><a href="/admin/events/all">Events</a></li>
-                                <li><a href="/admin/events/new">Add New Event</a></li>
-                            <% } else if (user) {%>
-                                <li><a href="/" class="active">Home</a></li>
-                                <li><a href="/user/events">All Events</a></li>
-                                <li><a href="/user/events/own">My Events</a></li>
-                            <%} else {%>
-                                <li><a href="/" class="active">Home</a></li>
-                                <li><a href="/user/events">Shows & Events</a></li>
-                                <li><a href="/auth/signin">Sign In</a></li>
-                                <li><a href="/auth/signup">Sign Up</a></li> 
-                            <%}%>  
-                        </ul>        
+                            <% if (admin) { %>
+                                <li><a href="/admin/dashboard" class="<%= (currentPath === '/admin/dashboard') ? 'active' : '' %>">Dashboard</a></li>
+                                <li><a href="/admin/events/all" class="<%= (currentPath === '/admin/events/all') ? 'active' : '' %>">Events</a></li>
+                                <li><a href="/admin/events/new" class="<%= (currentPath === '/admin/events/new') ? 'active' : '' %>">Add New Event</a></li>
+                            <% } else if (user) { %>
+                                <li><a href="/" class="<%= (currentPath === '/') ? 'active' : '' %>">Home</a></li>
+                                <li><a href="/user/events" class="<%= (currentPath === '/user/events') ? 'active' : '' %>">All Events</a></li>
+                                <li><a href="/user/events/own" class="<%= (currentPath === '/user/events/own') ? 'active' : '' %>">My Events</a></li>
+                            <% } else { %>
+                                <li><a href="/" class="<%= (currentPath === '/') ? 'active' : '' %>">Home</a></li>
+                                <li><a href="/user/events" class="<%= (currentPath === '/user/events') ? 'active' : '' %>">Shows & Events</a></li>
+                                <li><a href="/auth/signin" class="<%= (currentPath === '/auth/signin') ? 'active' : '' %>">Sign In</a></li>
+                                <li><a href="/auth/signup" class="<%= (currentPath === '/auth/signup') ? 'active' : '' %>">Sign Up</a></li>
+                            <% } %>
+                        </ul>                                                        
                         <a class='menu-trigger'>
                             <span>Menu</span>
                         </a>

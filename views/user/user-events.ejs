@@ -39,17 +39,21 @@
                 <% events.forEach(event => { %>
                     <tr>
                         <td><%= event.title %></td>
-                        <td><%= new Date(event.eventDate).toDateString() %></td>
+                        <td><%= event.eventDateTime%></td>
                         <td><%= event.location %></td>
                         <td><%= event.maxAttendees %></td>
                         <td>
-                            <form id="ratingForm" action="/user/events/<%=event._id%>/rate" method="post">
-                                <label for="rating">Rate this event (1-5):</label>
-                                <input type="number" id="rating" name="rating" min="1" max="5" required>
-                                <label for="comment">Leave a comment:</label>
-                                <textarea id="comment" name="comment"></textarea>
-                                <button type="submit">Submit Rating</button>
-                            </form>                            
+                            <% if (event.hasRating) {%>
+                                <p> <strong>You have already rated and commented on this event</strong> </p>
+                            <%} else {%>
+                                <form id="ratingForm" action="/user/events/<%=event._id%>/rate" method="post">
+                                    <label for="rating">Rate this event (1-5):</label>
+                                    <input type="number" id="rating" name="rating" min="1" max="5" required>
+                                    <label for="comment">Leave a comment:</label>
+                                    <textarea id="comment" name="comment"></textarea>
+                                    <button type="submit">Submit Rating</button>
+                                </form>  
+                            <%}%>                         
                         </td>
                     </tr>
                 <% }); %>

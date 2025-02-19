@@ -1,4 +1,4 @@
-<%- include('../partials/header', { pageTitle: 'Admin Sign In', bootstrap: '../../css/bootstrap.min.css', fontAwesome: '../../css/font-awesome.css', carousal: '../../css/owl-carousel.css', tooplate: '../../css/tooplate-artxibition.css' }) %>
+<%- include('../partials/header', { pageTitle: 'Admin All Events', bootstrap: '../../css/bootstrap.min.css', fontAwesome: '../../css/font-awesome.css', carousal: '../../css/owl-carousel.css', tooplate: '../../css/tooplate-artxibition.css' }) %>
 
     <!-- ***** About Us Page ***** -->
     <div class="page-heading-shows-events">
@@ -54,7 +54,7 @@
                             <img src="<%= event.imageUrl%>" alt="">
                         </div>
                             <div class="down-content">
-                                <span>There Are <%= event.maxAttendees - event.rsvps%> Tickets Left For This Show</span>
+                                <span>There Are <%= event.maxAttendees - event.rsvps.length %> Tickets Left For This Show</span>
                                 <h4><%= event.title%></h4>
                                 <ul>
                                     <li><i class="fa fa-clock-o"></i><%= event.eventDateTime %></li>

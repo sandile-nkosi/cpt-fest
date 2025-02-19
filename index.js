@@ -42,6 +42,12 @@ app.use((req, res, next) => {
 
   next();
 });
+
+app.use((req, res, next) => {
+  res.locals.currentPath = req.path; // Stores the current URL path for EJS templates
+  next();
+});
+
 app.use('/auth', authRoutes);
 app.use('/', eventRoutes);
 app.use('/user', userRoutes);

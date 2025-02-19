@@ -6,9 +6,9 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="main-content">
-                        <h6>Hot events right now</h6>
+                        <h3>Hot events in Cape Town right now!</h3>
                         <% singleEvents.forEach(singleEvent => {%>
-                            <h2><%= singleEvent.title %></h2>
+                            <h4><%= singleEvent.title %></h4>
                             <div class="main-white-button">
                                 <a href="/user/events/<%= singleEvent._id %>">Check it out</a>
                             </div>
