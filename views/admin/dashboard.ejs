@@ -15,39 +15,46 @@
                 <div class="col-lg-12">
                     <div class="heading">
                         <h2>Admin Dashboard</h2>
-                        <div class="container mt-5">
-                            <h2 class="text-center">Event Statistics</h2>
-                            <table class="table table-bordered mt-4">
-                                <thead>
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Date</th>
-                                        <th>Location</th>
-                                        <th>RSVPs</th>
-                                        <th>Average Rating</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% events.forEach(event => { %>
+                        <div id="printable-area">
+                            <div class="container mt-5">
+                                <h2 class="mb-4">Event Statistics</h2>
+                        
+                                <!-- Chart Section -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <canvas id="attendeesChart"></canvas>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <canvas id="ratingsChart"></canvas>
+                                    </div>
+                                </div>
+                        
+                                <!-- Table displaying event statistics -->
+                                <h2 class="mt-5 mb-4">Event Report</h2>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Event Title</th>
+                                            <th>Max Attendees</th>
+                                            <th>Attendee Count</th>
+                                            <th>Average Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% eventStats.forEach(event => { %>
                                         <tr>
                                             <td><%= event.title %></td>
-                                            <td><%= new Date(event.eventDate).toDateString() %></td>
-                                            <td><%= event.location %></td>
-                                            <td><%= event.rsvps.length %> / <%= event.maxAttendees %></td>
-                                            <td>
-                                                <% 
-                                                    let avgRating = event.ratings.length > 0 ? 
-                                                        (event.ratings.reduce((acc, r) => acc + r.rating, 0) / event.ratings.length).toFixed(1) 
-                                                        : "No ratings yet"; 
-                                                %>
-                                                <%= avgRating %>
-                                            </td>
+                                            <td><%= event.maxAttendees %></td>
+                                            <td><%= event.attendeeCount %></td>
+                                            <td><%= event.avgRating %>/5</td>
                                         </tr>
-                                    <% }); %>
-                                </tbody>
-                            </table>
-                        </div>
+                                        <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                        
                     </div>
+                    <button id="print-btn" class="btn btn-primary">Print Report</button>
                 </div>
             </div>
         </div>
@@ -70,6 +77,17 @@
     
     <!-- Global Init -->
     <script src="../../scripts/custom.js"></script>
+
+    <!-- Hidden script elements to store event data -->
+    <script type="application/json" id="eventTitles"><%- JSON.stringify(eventStats.map(e => e.title)) %></script>
+    <script type="application/json" id="attendeeCounts"><%- JSON.stringify(eventStats.map(e => e.attendeeCount)) %></script>
+    <script type="application/json" id="maxAttendees"><%- JSON.stringify(eventStats.map(e => e.maxAttendees)) %></script>
+    <script type="application/json" id="avgRatings"><%- JSON.stringify(eventStats.map(e => e.avgRating)) %></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../scripts/eventStats.js"></script>
+    <script src="../../scripts/print-report.js"></script>
 
   </body>
 </html>

@@ -54,6 +54,12 @@
                     <img src="<%= event.imageUrl %>" alt="">
                 </div>
                 <br>
+                <div class="quantity-content">
+                    <div class="left-content">
+                        <p><%= event.description %></p>
+                    </div>
+                </div>
+                <br>
                 <div>
                     <h4>Ratings & Comments</h4>
                         <ul>
@@ -75,7 +81,24 @@
                     <h4><%= event.title %></h4>
                     <span><%= event.maxAttendees - event.rsvps.length %> Tickets still available</span>
                     <ul>
-                        <li><i class="fa fa-clock-o"></i> <%= event.eventTime %></li>
+                        <li><i class="fa fa-clock-o"></i><%= event.eventDateTime %></li>
+                        <li>
+                            <div class="mt-4">
+                                <h4>Weather Forecast</h4>
+                                
+                                <% if (weatherDetails) { %>
+                                  <div class="weather-info">
+                                    <img src="<%= weatherDetails.icon %>" alt="Weather Icon" style="width: 50px;">
+                                    <p><strong>Temperature:</strong> <%= weatherDetails.temperature %></p>
+                                    <p><strong>Condition:</strong> <%= weatherDetails.condition %></p>
+                                    <p><strong>Wind Speed:</strong> <%= weatherDetails.windSpeed %></p>
+                                    <p><strong>Humidity:</strong> <%= weatherDetails.humidity %></p>
+                                  </div>
+                                <% } else { %>
+                                  <p>Weather data is unavailable at the moment.</p>
+                                <% } %>
+                              </div>
+                        </li>
                         <li><i class="fa fa-map-marker"></i><%= event.location %></li>
                         <li>
                             <div id="map" style="height: 400px; width: 100%;"></div>
@@ -88,11 +111,6 @@
                             <%}%>
                         </li>
                     </ul>
-                    <div class="quantity-content">
-                        <div class="left-content">
-                            <p><%= event.description %></p>
-                        </div>
-                    </div>
                     <div class="total">
                         <div class="main-dark-button">
                             <% if (user == null) {%>

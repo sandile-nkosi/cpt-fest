@@ -1,29 +1,35 @@
 const Admin = require("../models/Admin");
 const Event = require("../models/Event");
 const axios = require("axios");
+const moment = require('moment-timezone'); // Import moment-timezone
 
 async function getDashboard(req, res) {
-  const adminId = req.session.admin.uid; // Ensure session contains admin ID
-  const events = await Event.find()
-    .populate("rsvps", "fullName email")
-    .populate("ratings.user", "fullName email");
+  const adminId = req.session.admin ? req.session.admin.uid : null; // Check if admin is logged in
 
   if (!adminId) {
     return res.redirect("/auth/admin/signin");
   }
 
-  const admin = await Admin.findById(adminId).exec();
+  const admin = await Admin.findById(adminId).exec(); // Fetch admin info
 
-  if (!admin) {
-    return res.redirect("/auth/admin/signin");
-  }
+  const events = await Event.find({ isArchived: false })
+    .populate("rsvps", "fullName email")
+    .populate("ratings.user", "fullName email");
 
-  
+  const eventStats = events.map(event => ({
+    title: event.title,
+    maxAttendees: event.maxAttendees,
+    attendeeCount: event.rsvps.length,
+    avgRating: event.ratings.length
+      ? (event.ratings.reduce((sum, r) => sum + r.rating, 0) / event.ratings.length).toFixed(1)
+      : 0
+  }));
 
-  res.locals.admin = admin; // Now available in all views
+  res.locals.admin = admin; // Available in all views
 
-  res.render("admin/dashboard", { admin, events }); // Passing explicitly for dashboard as well
+  res.render("admin/dashboard", { admin, events, eventStats }); // Pass data to the view
 }
+
 
 //admin gets
 
@@ -108,8 +114,7 @@ async function addEvent(req, res, next) {
       return res.status(400).json({ error: "Event image is required." });
     }
 
-    const { title, description, maxAttendees, eventDate, eventTime, location } =
-      req.body;
+    const { title, description, maxAttendees, eventDate, location } = req.body;
     const apiKey = process.env.GOOGLE_MAPS_API_KEY;
     const eventImage = req.file.filename;
     const imagePath = `public/event-data/images/${eventImage}`;
@@ -142,12 +147,25 @@ async function addEvent(req, res, next) {
       return res.status(500).json({ error: "Failed to fetch location" });
     }
 
+    // Ensure the eventDate is in a valid ISO format before passing to moment
+    const formattedEventDate = moment(eventDate).format(); // Automatically converts to ISO 8601 format
+
+    // Convert to Pretoria timezone and then to UTC
+    const eventDateTime = moment.tz(formattedEventDate, 'Africa/Johannesburg');
+
+    // If the date is invalid, return an error
+    if (!eventDateTime.isValid()) {
+      return res.status(400).json({ error: "Invalid event date" });
+    }
+
+    const eventDateTimeUTC = eventDateTime.utc().toDate(); // Convert to UTC Date object
+
+    // Create the event with the combined eventDateTime field
     const event = await Event.create({
       title,
       description,
       maxAttendees,
-      eventDate,
-      eventTime,
+      eventDateTime: eventDateTimeUTC, // Store combined datetime in UTC
       location,
       longitude: lng,
       latitude: lat,

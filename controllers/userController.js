@@ -3,6 +3,7 @@ const Event = require("../models/Event");
 const RSVP = require("../models/RSVPs");
 const mongoose = require("mongoose");
 const sendMail = require("../middleware/mailer");
+const axios = require("axios");
 
 async function getAllEvents(req, res) {
   const userId = req.session.user ? req.session.user.uid : null; // Check if user is logged in
@@ -16,7 +17,16 @@ async function getAllEvents(req, res) {
 
   // Modify each event to include a formatted date and calculate open spaces
   events.forEach((event) => {
-    event.formattedDate = new Date(event.eventDate).toDateString();
+    // Format the date and time
+    event.formattedDate = new Date(event.eventDateTime).toLocaleString("en-ZA", {
+      weekday: "long", // e.g. "Monday"
+      year: "numeric", // e.g. "2025"
+      month: "long", // e.g. "February"
+      day: "numeric", // e.g. "19"
+      hour: "2-digit", // e.g. "02"
+      minute: "2-digit", // e.g. "30"
+      hour12: false, // 24-hour format
+    });
 
     // Calculate open spaces
     event.openSpaces = event.maxAttendees - event.rsvps.length;
@@ -27,37 +37,76 @@ async function getAllEvents(req, res) {
 }
 
 async function getEvent(req, res) {
-  const userId = req.session.user ? req.session.user.uid : null; // Check if user is logged in
-  const eventId = req.params.eventId; // Get eventId from the request parameters
+  try {
+    const userId = req.session.user ? req.session.user.uid : null; // Check if user is logged in
+    const eventId = req.params.eventId; // Get eventId from the request parameters
 
-  const user = userId ? await User.findById(userId).exec() : null; // Only fetch user if logged in
+    const user = userId ? await User.findById(userId).exec() : null; // Fetch user if logged in
+    res.locals.user = user; // Available in all views
 
-  res.locals.user = user; // Available in all views
+    const event = await Event.findById(eventId).exec(); // Fetch the event by ID
+    if (!event) {
+      return res.status(404).send("Event not found"); // Handle event not found scenario
+    }
 
-  const event = await Event.findById(eventId).exec(); // Fetch the event by ID
+    // Format the event date
+    event.formattedDate = new Date(event.eventDate).toDateString();
 
-  if (!event) {
-    return res.status(404).send("Event not found"); // Handle event not found scenario
+    // Calculate average rating
+    const calculateAverageRating = (ratings) => {
+      if (ratings.length === 0) return 0;
+      const sum = ratings.reduce((total, r) => total + r.rating, 0);
+      return (sum / ratings.length).toFixed(1); // Round to 1 decimal place
+    };
+    event.averageRating = calculateAverageRating(event.ratings);
+
+    // Check if user has RSVP'd
+    const isRSVPed = user ? event.rsvps.includes(userId) : false;
+
+    // Fetch future weather forecast
+    const weatherApiKey = process.env.OPENWEATHER_API_KEY;
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${event.latitude}&lon=${event.longitude}&units=metric&appid=${weatherApiKey}`;
+
+    let weatherDetails = null;
+    try {
+      const response = await axios.get(weatherUrl);
+      const forecastData = response.data.list;
+
+      // Convert event date & time to a timestamp
+      const eventDateTime = new Date(`${event.eventDate}T${event.eventTime}`).getTime();
+
+      // Find the closest forecast to the event's time
+      let closestForecast = forecastData.reduce((closest, forecast) => {
+        let forecastTime = new Date(forecast.dt * 1000).getTime();
+        return Math.abs(forecastTime - eventDateTime) < Math.abs(new Date(closest.dt * 1000).getTime() - eventDateTime)
+          ? forecast
+          : closest;
+      }, forecastData[0]);
+
+      // Extract weather details
+      weatherDetails = {
+        temperature: closestForecast.main.temp + "°C",
+        condition: closestForecast.weather[0].description,
+        windSpeed: closestForecast.wind.speed + " m/s",
+        humidity: closestForecast.main.humidity + "%",
+        icon: `https://openweathermap.org/img/wn/${closestForecast.weather[0].icon}.png`,
+      };
+    } catch (error) {
+      console.error("Error fetching weather data:", error);
+    }
+
+    // Render event details with weather
+    res.render("user/event-details", {
+      user,
+      event,
+      isRSVPed,
+      weatherDetails, // Pass weather details to the view
+      apiKey: process.env.GOOGLE_MAPS_API_KEY,
+    });
+  } catch (error) {
+    console.error("Error fetching event:", error);
+    res.status(500).send("Internal Server Error");
   }
-
-  event.formattedDate = new Date(event.eventDate).toDateString(); // Format the event date
-
-  const calculateAverageRating = (ratings) => {
-    if (ratings.length === 0) return 0;
-    const sum = ratings.reduce((total, r) => total + r.rating, 0);
-    return (sum / ratings.length).toFixed(1); // Round to 1 decimal place
-  };
-
-  event.averageRating = calculateAverageRating(event.ratings);
-
-  const isRSVPed = user ? event.rsvps.includes(userId) : false; // Only check RSVP if user is logged in
-
-  res.render("user/event-details", {
-    user,
-    event,
-    isRSVPed,
-    apiKey: process.env.GOOGLE_MAPS_API_KEY,
-  }); // Passing the event to the view
 }
 
 async function toggleRSVP(req, res) {
@@ -107,7 +156,7 @@ async function toggleRSVP(req, res) {
         session.endSession();
 
         const mailOptions = {
-            from: "VentPass Events <sankosi.uct@gmail.com>",
+            from: "One City Event Company <sankosi.uct@gmail.com>",
             to: req.session.user.email,
             subject: `🚫 RSVP Cancelled for ${event.title}`,
             text: "Test",
@@ -137,8 +186,8 @@ async function toggleRSVP(req, res) {
           
                 <hr style="margin: 20px 0; border: 0; border-top: 1px solid #ddd;">
                 <p style="font-size: 14px; color: #777;">
-                  VentPass Events<br>
-                  &copy; 2025 VentPass. All rights reserved.
+                  One City Event Company<br>
+                  &copy; 2025 One City Event Company. All rights reserved.
                 </p>
           
               </div>
@@ -176,7 +225,7 @@ async function toggleRSVP(req, res) {
       session.endSession();
 
       const mailOptions = {
-        from: "VentPass Events <sankosi.uct@gmail.com>",
+        from: "One City Event Company <sankosi.uct@gmail.com>",
         to: req.session.user.email,
         subject: `🎉 You're RSVP'd for ${event.title}!`,
         text: "Test",
@@ -187,7 +236,7 @@ async function toggleRSVP(req, res) {
 
         <p style="font-size: 16px; color: #333; line-height: 1.6;">
             Hi ${user.fullName},<br>
-            You have successfully RSVP'd for <strong>${event.title}]</strong>. We're excited to have you join us!
+            You have successfully RSVP'd for <strong>${event.title}</strong>. We're excited to have you join us!
         </p>
 
         <p style="font-size: 16px; color: #555; line-height: 1.6;">
@@ -206,8 +255,8 @@ async function toggleRSVP(req, res) {
 
         <hr style="margin: 20px 0; border: 0; border-top: 1px solid #ddd;">
         <p style="font-size: 14px; color: #777;">
-            VentPass Events<br>
-            &copy; 2025 VentPass. All rights reserved.
+            One City Event Company<br>
+            &copy; 2025 One City Event Company. All rights reserved.
         </p>
 
         </div>

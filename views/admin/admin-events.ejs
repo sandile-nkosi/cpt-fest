@@ -57,7 +57,7 @@
                                 <span>There Are <%= event.maxAttendees - event.rsvps%> Tickets Left For This Show</span>
                                 <h4><%= event.title%></h4>
                                 <ul>
-                                    <li><i class="fa fa-clock-o"></i> <%= event.formattedDate + ', ' + event.eventTime %></li>
+                                    <li><i class="fa fa-clock-o"></i><%= event.eventDateTime %></li>
                                     <li><i class="fa fa-map-marker"></i><%= event.location%></li>
                                 </ul>
                                 <div class="row">

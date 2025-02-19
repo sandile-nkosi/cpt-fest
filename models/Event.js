@@ -16,8 +16,9 @@ const eventSchema = mongoose.Schema(
     },
     rsvps: [{ 
       type: mongoose.Schema.Types.ObjectId, 
-      ref: "User" }],
-    eventDate: {
+      ref: "User" 
+    }],
+    eventDateTime: {  // Combined date and time field
       type: Date,
       required: true,
     },
@@ -28,12 +29,7 @@ const eventSchema = mongoose.Schema(
           comment: String,
           createdAt: { type: Date, default: Date.now }
       }
-    ]
-    ,
-    eventTime: {
-      type: String,
-      required: true,
-    },
+    ],
     location: {
       type: String,
       required: true,
@@ -68,5 +64,6 @@ const eventSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
 
 module.exports = mongoose.model("Event", eventSchema);
