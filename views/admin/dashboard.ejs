@@ -1,82 +1,82 @@
-<%- include('../partials/header', { pageTitle: 'Admin Dashboard', bootstrap: '../../css/bootstrap.min.css', fontAwesome: '../../css/font-awesome.css', carousal: '../../css/owl-carousel.css', tooplate: '../../css/tooplate-artxibition.css' }) %>
+<%- include('../partials/header', { 
+    pageTitle: 'Admin Dashboard', 
+    bootstrap: '../../css/bootstrap.min.css', 
+    fontAwesome: '../../css/font-awesome.css', 
+    carousal: '../../css/owl-carousel.css', 
+    tooplate: '../../css/tooplate-artxibition.css',
+    customCSS: '../../css/admin-dashboard.css' 
+}) %>
+<link rel="stylesheet" href="../../css/admin.css">
 
-    <div class="tickets-page">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="heading">
-                        <h2>Admin Dashboard</h2>
-                        <div id="printable-area">
-                            <div class="container mt-5">
-                                <h3 class="mb-4">Event Statistics</h2>
-                                <!-- Chart Section -->
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <canvas id="attendeesChart"></canvas>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <canvas id="ratingsChart"></canvas>
-                                    </div>
+<hr class="styled-hr">
+<div class="tickets-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="heading">
+                    <h2>Admin Dashboard</h2>
+                    <div id="printable-area">
+                        <div class="container mt-5">
+                            <h3 class="mb-4">Event Statistics</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <canvas id="attendeesChart"></canvas>
                                 </div>
-                                <!-- Table displaying event statistics -->
-                                <h3 class="mt-5 mb-4">Event Report</h2>
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Event Title</th>
-                                            <th>Max Attendees</th>
-                                            <th>Attendee Count</th>
-                                            <th>Average Rating</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% eventStats.forEach(event => { %>
-                                        <tr>
-                                            <td><%= event.title %></td>
-                                            <td><%= event.maxAttendees %></td>
-                                            <td><%= event.attendeeCount %></td>
-                                            <td><%= event.avgRating %>/5</td>
-                                        </tr>
-                                        <% }); %>
-                                    </tbody>
-                                </table>
+                                <div class="col-md-6">
+                                    <canvas id="ratingsChart"></canvas>
+                                </div>
                             </div>
-                        </div>                        
+                            <h3 class="mt-5 mb-4">Event Report</h3>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Event Title</th>
+                                        <th>Max Attendees</th>
+                                        <th>Attendee Count</th>
+                                        <th>Average Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% eventStats.forEach(event => { %>
+                                    <tr>
+                                        <td><%= event.title %></td>
+                                        <td><%= event.maxAttendees %></td>
+                                        <td><%= event.attendeeCount %></td>
+                                        <td><%= event.avgRating %>/5</td>
+                                    </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <button id="print-btn" class="btn btn-primary">Print Report</button>
                 </div>
+                <button id="print-btn" class="dashboard-dark-button">Print Report</button>
             </div>
         </div>
     </div>
-    <!-- jQuery -->
-    <script src="../../scripts/jquery-2.1.0.min.js"></script>
+</div>
 
-    <!-- Bootstrap -->
-    <script src="../../scripts/popper.js"></script>
-    <script src="../../scripts/bootstrap.min.js"></script>
+<!-- jQuery -->
+<script src="../../scripts/jquery-2.1.0.min.js"></script>
+<script src="../../scripts/popper.js"></script>
+<script src="../../scripts/bootstrap.min.js"></script>
+<script src="../../scripts/scrollreveal.min.js"></script>
+<script src="../../scripts/waypoints.min.js"></script>
+<script src="../../scripts/jquery.counterup.min.js"></script>
+<script src="../../scripts/imgfix.min.js"></script>
+<script src="../../scripts/mixitup.js"></script>
+<script src="../../scripts/accordions.js"></script>
+<script src="../../scripts/owl-carousel.js"></script>
+<script src="../../scripts/custom.js"></script>
 
-    <!-- Plugins -->
-    <script src="../../scripts/scrollreveal.min.js"></script>
-    <script src="../../scripts/waypoints.min.js"></script>
-    <script src="../../scripts/jquery.counterup.min.js"></script>
-    <script src="../../scripts/imgfix.min.js"></script> 
-    <script src="../../scripts/mixitup.js"></script> 
-    <script src="../../scripts/accordions.js"></script>
-    <script src="../../scripts/owl-carousel.js"></script>
-    
-    <!-- Global Init -->
-    <script src="../../scripts/custom.js"></script>
+<!-- Hidden script elements to store event data -->
+<script type="application/json" id="eventTitles"><%- JSON.stringify(eventStats.map(e => e.title)) %></script>
+<script type="application/json" id="attendeeCounts"><%- JSON.stringify(eventStats.map(e => e.attendeeCount)) %></script>
+<script type="application/json" id="maxAttendees"><%- JSON.stringify(eventStats.map(e => e.maxAttendees)) %></script>
+<script type="application/json" id="avgRatings"><%- JSON.stringify(eventStats.map(e => e.avgRating)) %></script>
 
-    <!-- Hidden script elements to store event data -->
-    <script type="application/json" id="eventTitles"><%- JSON.stringify(eventStats.map(e => e.title)) %></script>
-    <script type="application/json" id="attendeeCounts"><%- JSON.stringify(eventStats.map(e => e.attendeeCount)) %></script>
-    <script type="application/json" id="maxAttendees"><%- JSON.stringify(eventStats.map(e => e.maxAttendees)) %></script>
-    <script type="application/json" id="avgRatings"><%- JSON.stringify(eventStats.map(e => e.avgRating)) %></script>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="../../scripts/eventStats.js"></script>
-    <script src="../../scripts/print-report.js"></script>
-
-  </body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="../../scripts/eventStats.js"></script>
+<script src="../../scripts/print-report.js"></script>
+</body>
 </html>

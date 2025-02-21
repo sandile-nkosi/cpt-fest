@@ -20,46 +20,58 @@
 
 <div class="container mt-5">
     <h2 class="text-center">My RSVP'd Events</h2>
-    <table class="table table-bordered mt-4">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Date</th>
-                <th>Location</th>
-                <th>Max Attendees</th>
-                <th>Ratings and Comments</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% if (events.length === 0) { %>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover mt-4 rounded shadow-sm bg-white">
+            <thead class="table-dark">
                 <tr>
-                    <td colspan="5" class="text-center">You have not RSVP'd to any events.</td>
+                    <th class="text-light">Title</th>
+                    <th class="text-light">Date</th>
+                    <th class="text-light">Location</th>
+                    <th class="text-light">Max Attendees</th>
+                    <th class="text-light">Ratings and Comments</th>
                 </tr>
-            <% } else { %>
-                <% events.forEach(event => { %>
+            </thead>
+            <tbody>
+                <% if (events.length === 0) { %>
                     <tr>
-                        <td><%= event.title %></td>
-                        <td><%= event.eventDateTime%></td>
-                        <td><%= event.location %></td>
-                        <td><%= event.maxAttendees %></td>
-                        <td>
-                            <% if (event.hasRating) {%>
-                                <p> <strong>You have already rated and commented on this event</strong> </p>
-                            <%} else {%>
-                                <form id="ratingForm" action="/user/events/<%=event._id%>/rate" method="post">
-                                    <label for="rating">Rate this event (1-5):</label>
-                                    <input type="number" id="rating" name="rating" min="1" max="5" required>
-                                    <label for="comment">Leave a comment:</label>
-                                    <textarea id="comment" name="comment"></textarea>
-                                    <button type="submit">Submit Rating</button>
-                                </form>  
-                            <%}%>                         
+                        <td colspan="5" class="text-center text-muted p-4">
+                            You have not RSVP'd to any events.
                         </td>
                     </tr>
-                <% }); %>
-            <% } %>
-        </tbody>
-    </table>
+                <% } else { %>
+                    <% events.forEach(event => { %>
+                        <tr class="text-dark">
+                            <td class="align-middle"><%= event.title %></td>
+                            <td class="align-middle"><%= event.eventDateTime %></td>
+                            <td class="align-middle"><%= event.location %></td>
+                            <td class="align-middle text-center"><%= event.maxAttendees %></td>
+                            <td>
+                                <% if (event.hasRating) { %>
+                                    <div class="alert alert-info text-center p-3">
+                                        <strong>You have already rated and commented on this event</strong>
+                                    </div>
+                                <% } else { %>
+                                    <form id="ratingForm" action="/user/events/<%= event._id %>/rate" method="post" class="p-3 border rounded shadow-sm bg-light">
+                                        <div class="mb-3">
+                                            <label for="rating" class="form-label fw-bold text-dark">Rate this event (1-5):</label>
+                                            <input type="number" id="rating" name="rating" class="form-control" min="1" max="5" required>
+                                        </div>
+                            
+                                        <div class="mb-3">
+                                            <label for="comment" class="form-label fw-bold text-dark">Leave a comment:</label>
+                                            <textarea id="comment" name="comment" class="form-control" rows="3"></textarea>
+                                        </div>
+                            
+                                        <button type="submit" class="btn btn-dark w-100 px-4 py-2 rounded-pill">Submit Rating</button>
+                                    </form>
+                                <% } %>
+                            </td>                        
+                        </tr>
+                    <% }); %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>      
 </div>
 
 <%- include('../partials/footer') %>

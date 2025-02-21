@@ -1,0 +1,91 @@
+/* Custom CSS for Header */
+.pre-header {
+    background-color: #f8f9fa;
+    padding: 10px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.pre-header .text-button a,
+.pre-header .text-button button {
+    color: #2c3e50;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.pre-header .text-button a:hover,
+.pre-header .text-button button:hover {
+    color: #1a252f;
+}
+
+.header-area {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-area .logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c3e50;
+    text-decoration: none;
+}
+
+.header-area .logo em {
+    font-style: normal;
+    color: #e74c3c;
+}
+
+.header-area .nav {
+    margin-left: auto;
+}
+
+.header-area .nav-link {
+    color: #2c3e50;
+    font-weight: 500;
+    padding: 10px 15px;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.header-area .nav-link.active,
+.header-area .nav-link:hover {
+    color: #e74c3c;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.menu-trigger {
+    display: none;
+    font-size: 18px;
+    color: #2c3e50;
+    cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .header-area .nav {
+        display: none;
+    }
+
+    .menu-trigger {
+        display: block;
+    }
+
+    .header-area .nav.active {
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-area .nav-link {
+        padding: 10px 20px;
+    }
+}

@@ -8,8 +8,20 @@ const axios = require("axios");
 async function getAllEvents(req, res) {
   const userId = req.session.user ? req.session.user.uid : null; // Check if user is logged in
 
-  // Find events where isArchived is false
-  const events = await Event.find({ isArchived: false });
+  // Pagination logic
+  const page = parseInt(req.query.page) || 1; // Get the current page from the query string (default to 1)
+  const limit = 6; // Number of events per page (updated to 6)
+  const skip = (page - 1) * limit; // Calculate the number of documents to skip
+
+  // Find events where isArchived is false, with pagination
+  const events = await Event.find({ isArchived: false })
+    .skip(skip)
+    .limit(limit)
+    .exec();
+
+  // Count the total number of events (for pagination)
+  const totalEvents = await Event.countDocuments({ isArchived: false });
+  const totalPages = Math.ceil(totalEvents / limit); // Calculate total pages
 
   const user = userId ? await User.findById(userId).exec() : null; // Only fetch user if logged in
 
@@ -32,8 +44,13 @@ async function getAllEvents(req, res) {
     event.openSpaces = event.maxAttendees - event.rsvps.length;
   });
 
-  // Render the page and pass events along with user and openSpaces
-  res.render("user/events", { user, events });
+  // Render the page and pass events, pagination data, and user
+  res.render("user/events", {
+    user,
+    events,
+    currentPage: page,
+    totalPages,
+  });
 }
 
 async function getEvent(req, res) {
@@ -114,6 +131,8 @@ async function toggleRSVP(req, res) {
   if (!userId) {
     return res.status(401).json({ error: "User not authenticated" });
   }
+
+  console.log("User ID: ", userId);
 
   const user = userId ? await User.findById(userId).exec() : null; // Only fetch user if logged in
   const eventId = req.params.eventId;

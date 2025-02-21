@@ -1,48 +1,60 @@
 <%- include('../partials/header', { pageTitle: 'Admin Add New Event', bootstrap: '../../css/bootstrap.min.css', fontAwesome: '../../css/font-awesome.css', carousal: '../../css/owl-carousel.css', tooplate: '../../css/tooplate-artxibition.css' }) %>
+<link rel="stylesheet" href="../../css/admin.css">
+
+<hr class="styled-hr">
 
     <div class="rent-venue-application">
         <div class="container">
+          <!-- Search Box and Add New Event Button -->
+          <div class="col-lg-12 mb-4">
+            <div class="search-box p-4 bg-light rounded shadow-sm">
+              <div class="row align-items-center">
+                <div class="col-lg-5">
+                    <div class="search-heading">
+                        <h3 class="mb-0">Add New Event</h3>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
             <div class="row">
                 <div class="col-lg-9">
-                    <div class="heading-text">
-                        <h4>Add A New Event</h4>
-                    </div>
-                    <div class="contact-form">
+                    <div class="contact-form bg-white p-4 rounded shadow-sm">
                       <form id="contact" action="/admin/events/new" method="post" enctype="multipart/form-data">
                         <div class="row">
-                          <div class="col-md-6 col-sm-12">
+                          <div class="col-12 mb-3">
                             <fieldset>
                               <input name="title" type="text" id="title" placeholder="Title*">
                             </fieldset>
                           </div>
-                          <div class="col-md-6 col-sm-12">
+                          <div class="col-12 mb-3">
                             <fieldset>
                               <input name="description" type="text" id="description" placeholder="Description*">
                             </fieldset>
                           </div>
-                          <div class="col-md-6 col-sm-12">
+                          <div class="col-12 mb-3">
                             <fieldset>
                               <input name="maxAttendees" type="number" id="maxAttendees" placeholder="Max Attendees*">
                             </fieldset>
                           </div>
-                          <div class="col-md-6 col-sm-12">
+                          <div class="col-12 mb-3">
                             <fieldset>
                               <input name="eventDate" type="datetime-local" id="eventDate" >
                             </fieldset>
                           </div>
-                          <div class="col-md-6 col-sm-12">
+                          <div class="col-12 mb-3">
                             <fieldset>
                               <input name="location" type="text" id="location" placeholder="Location*" required>
                             </fieldset>
                           </div>
-                          <div class="col-md-6 col-sm-12">
+                          <div class="col-12 mb-3">
                             <fieldset>
                               <input name="eventImage" type="file" id="eventImage" placeholder="Event Image*" required>
                             </fieldset>
                           </div>
-                          <div class="col-lg-12">
+                          <div class="col-12">
                             <fieldset>
-                              <button type="submit" id="form-submit" class="main-dark-button">Add Event</button>
+                              <button type="submit" id="form-submit" class="btn btn-dark w-100n">Add Event</button>
                             </fieldset>
                           </div>
                         </div>

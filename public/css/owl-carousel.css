@@ -53,6 +53,7 @@
       height: 100%;
       min-height: 240px;
       object-fit: cover;
+      border-radius: 50%;
     }
     .owl-carousel .owl-nav.disabled,
     .owl-carousel .owl-dots.disabled {

@@ -34,7 +34,7 @@ async function getDashboard(req, res) {
 //admin gets
 
 async function getAllEvents(req, res) {
-  const EVENTS_PER_PAGE = 10; // Adjust the number of events per page
+  const EVENTS_PER_PAGE = 5; // Set the number of events per page to 5
   const page = parseInt(req.query.page) || 1; // Get the current page from query string, default to page 1
 
   const adminId = req.session.admin.uid; // Ensure session contains admin ID
@@ -71,7 +71,7 @@ async function getAllEvents(req, res) {
       events,
       admin,
       currentPage: page,
-      totalPages: totalPages
+      totalPages: totalPages,
     });
   } catch (error) {
     console.error(error);

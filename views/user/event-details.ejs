@@ -35,96 +35,95 @@
   
 
 <!-- ***** About Us Page ***** -->
-<div class="page-heading-shows-events">
+<div class="page-heading-shows-events py-5 bg-light">
     <div class="container">
-        <div class="row">
+        <div class="row text-center">
             <div class="col-lg-12">
-                <h2>RSVP Now!</h2>
-                <span>Check out upcoming and past shows & events and RSVP right now.</span>
+                <h2 class="text-light mb-3">RSVP Now!</h2>
+                <span class="text-light fs-5">Check out upcoming and past shows & events and RSVP right now.</span>
             </div>
         </div>
     </div>
 </div>
 
-<div class="ticket-details-page">
+
+
+<div class="ticket-details-page py-5 bg-light">
     <div class="container">
         <div class="row">
+            <!-- Left Column -->
             <div class="col-lg-8">
-                <div class="left-image">
-                    <img src="<%= event.imageUrl %>" alt="">
+                <div class="left-image mb-4">
+                    <img src="<%= event.imageUrl %>" alt="Event Image" class="img-fluid rounded shadow-sm">
                 </div>
-                <br>
-                <div class="quantity-content">
+                <div class="quantity-content mb-4">
                     <div class="left-content">
-                        <p><%= event.description %></p>
+                        <p class="text-dark"><%= event.description %></p>
                     </div>
                 </div>
-                <br>
-                <div>
-                    <h4>Ratings & Comments</h4>
-                        <ul>
-                            <% event.ratings.forEach(rating => { %>
-                                <li>
-                                    <strong>Rating:</strong> <%= rating.rating %> ⭐
-                                    <br>
-                                    <strong>Comment:</strong> <%= rating.comment %>
-                                    <br>
-                                    <em><%= new Date(rating.createdAt).toLocaleString() %></em>
-                                </li>
-                                <hr>
-                            <% }); %>
-                        </ul>
+                <div class="ratings-comments">
+                    <h4 class="text-dark">Ratings & Comments</h4>
+                    <ul class="list-unstyled">
+                        <% event.ratings.forEach(rating => { %>
+                            <li class="mb-3">
+                                <strong class="text-dark">Rating:</strong> <%= rating.rating %> ⭐
+                                <br>
+                                <strong class="text-dark">Comment:</strong> <%= rating.comment %>
+                                <br>
+                                <em class="text-muted"><%= new Date(rating.createdAt).toLocaleString() %></em>
+                            </li>
+                            <hr>
+                        <% }); %>
+                    </ul>
                 </div>
             </div>
+            <!-- Right Column -->
             <div class="col-lg-4">
                 <div class="right-content">
-                    <h4><%= event.title %></h4>
-                    <span><%= event.maxAttendees - event.rsvps.length %> Tickets still available</span>
-                    <ul>
-                        <li><i class="fa fa-clock-o"></i><%= event.eventDateTime %></li>
-                        <li>
-                            <div class="mt-4">
-                                <h4>Weather Forecast</h4>
-                                
-                                <% if (weatherDetails) { %>
-                                  <div class="weather-info">
+                    <h4 class="text-dark"><%= event.title %></h4>
+                    <span class="text-muted"><%= event.maxAttendees - event.rsvps.length %> Tickets still available</span>
+                    <ul class="list-unstyled mt-3">
+                        <li class="text-secondary"><i class="fa fa-clock-o me-2 text-warning"></i><%= event.eventDateTime %></li>
+                        <li class="mt-4">
+                            <h4 class="text-dark">Weather Forecast</h4>
+                            <% if (weatherDetails) { %>
+                                <div class="weather-info">
                                     <img src="<%= weatherDetails.icon %>" alt="Weather Icon" style="width: 50px;">
                                     <p><strong>Temperature:</strong> <%= weatherDetails.temperature %></p>
                                     <p><strong>Condition:</strong> <%= weatherDetails.condition %></p>
                                     <p><strong>Wind Speed:</strong> <%= weatherDetails.windSpeed %></p>
                                     <p><strong>Humidity:</strong> <%= weatherDetails.humidity %></p>
-                                  </div>
-                                <% } else { %>
-                                  <p>Weather data is unavailable at the moment.</p>
-                                <% } %>
-                              </div>
+                                </div>
+                            <% } else { %>
+                                <p class="text-muted">Weather data is unavailable at the moment.</p>
+                            <% } %>
                         </li>
-                        <li><i class="fa fa-map-marker"></i><%= event.location %></li>
+                        <li class="text-secondary"><i class="fa fa-map-marker me-2 text-danger"></i><%= event.location %></li>
                         <li>
-                            <div id="map" style="height: 400px; width: 100%;"></div>
+                            <div id="map" style="height: 400px; width: 100%;" class="mt-4"></div>
                         </li>
                         <li>
-                            <% if (event.averageRating <= 0) {%>
-                                <p>⭐ Average Rating: No ratings yet</p>
-                            <%} else {%>
-                                <p>⭐ Average Rating: <%= event.averageRating %> / 5</p>  
-                            <%}%>
+                            <% if (event.averageRating <= 0) { %>
+                                <p class="text-muted">⭐ Average Rating: No ratings yet</p>
+                            <% } else { %>
+                                <p class="text-muted">⭐ Average Rating: <%= event.averageRating %> / 5</p>
+                            <% } %>
                         </li>
                     </ul>
-                    <div class="total">
+                    <div class="total mt-4">
                         <div class="main-dark-button">
-                            <% if (user == null) {%>
-                                <button class="rsvp-btn" disabled>Sign In to RSVP</button>
-                            <%}else {%>
+                            <% if (user == null) { %>
+                                <button class="dashboard-dark-button w-100" disabled>Sign In to RSVP</button>
+                            <% } else { %>
                                 <% if (isRSVPed) { %>
-                                    <button class="rsvp-btn" data-event-id="<%= event._id %>" data-rsvped="true">Cancel RSVP</button>
+                                    <button class="dashboard-dark-button w-100" data-event-id="<%= event._id %>" data-rsvped="true">Cancel RSVP</button>
                                 <% } else { %>
-                                    <button class="rsvp-btn" data-event-id="<%= event._id %>" data-rsvped="false">Click to RSVP</button>
+                                    <button class="dashboard-dark-button w-100" data-event-id="<%= event._id %>" data-rsvped="false">Click to RSVP</button>
                                 <% } %>
-                            <%}%>
+                            <% } %>
                         </div>
                     </div>
-                    <div class="warn">
+                    <div class="warn mt-3 text-muted">
                         <p>*Each user needs to RSVP to attend an event</p>
                     </div>
                 </div>
@@ -132,6 +131,7 @@
         </div>
     </div>
 </div>
+
 
 <%- include('../partials/footer') %>
 
@@ -157,7 +157,7 @@
 
 <script>
     $(document).ready(function() {
-        $(".rsvp-btn").on("click", function() {
+        $(".dashboard-dark-button").on("click", function() {
             const button = $(this);
             const eventId = button.data("event-id");
             const isRSVPed = button.data("rsvped"); // Boolean status
