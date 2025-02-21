@@ -23,11 +23,20 @@ function getSignUp(req, res) {
 
 function getSignIn(req, res) {
   if (req.session.user) return res.redirect("/user/events");
-  res.render("user/user-signin");
+
+  const sessionData = sessionFlash.getSessionData(req) || {
+    email: "",
+  };
+
+  res.render("user/user-signin", { sessionData });
 }
 
 function getAdminSignIn(req, res) {
-  res.render("admin/admin-signin");
+  const sessionData = sessionFlash.getSessionData(req) || {
+    email: "",
+  };
+
+  res.render("admin/admin-signin", { sessionData });
 }
 
 // POST Routes
@@ -52,7 +61,7 @@ async function signUp(req, res, next) {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return sessionFlash.flashDataToSession(req, {
-        errorMessage: "User already exists.",
+        errorMessage: "User already exists. Please sign in.",
         fullName,
         city,
         email,
@@ -63,8 +72,12 @@ async function signUp(req, res, next) {
     const user = await User.create({ fullName, city, email, password: hashedPassword });
 
     if (!user) {
-      console.error("User creation failed");
-      return res.status(400).redirect("/auth/signup");
+      return sessionFlash.flashDataToSession(req, {
+        errorMessage: "User creation failed. Please try again.",
+        fullName,
+        city,
+        email,
+      }, () => res.redirect("/auth/signup"));
     }
 
     // Send welcome email
@@ -96,12 +109,18 @@ async function signIn(req, res, next) {
   try {
     const existingUser = await User.findOne({ email: lowerEmail });
     if (!existingUser) {
-      return handleAuthError(req, res, "User does not exist. Please register.", email, "/auth/signin");
+      return sessionFlash.flashDataToSession(req, {
+        errorMessage: "User does not exist. Please register.",
+        email,
+      }, () => res.redirect("/auth/signin"));
     }
 
     const passwordMatch = await bcrypt.compare(password, existingUser.password);
     if (!passwordMatch) {
-      return handleAuthError(req, res, "Incorrect password. Try again.", email, "/auth/signin");
+      return sessionFlash.flashDataToSession(req, {
+        errorMessage: "Incorrect password. Try again.",
+        email,
+      }, () => res.redirect("/auth/signin"));
     }
 
     req.session.user = { uid: existingUser._id, email: existingUser.email };
@@ -152,12 +171,18 @@ async function adminSignIn(req, res, next) {
   try {
     const existingAdmin = await Admin.findOne({ email: lowerEmail });
     if (!existingAdmin) {
-      return handleAuthError(req, res, "Admin does not exist. Please register.", email, "/auth/admin/signin");
+      return sessionFlash.flashDataToSession(req, {
+        errorMessage: "Admin does not exist. Please register.",
+        email,
+      }, () => res.redirect("/auth/admin/signin"));
     }
 
     const passwordMatch = await bcrypt.compare(password, existingAdmin.password);
     if (!passwordMatch) {
-      return handleAuthError(req, res, "Incorrect password. Try again.", email, "/auth/admin/signin");
+      return sessionFlash.flashDataToSession(req, {
+        errorMessage: "Incorrect password. Try again.",
+        email,
+      }, () => res.redirect("/auth/admin/signin"));
     }
 
     req.session.admin = { uid: existingAdmin._id, email: existingAdmin.email };
@@ -172,11 +197,6 @@ function adminSignOut(req, res) {
   res.redirect("/");
 }
 
-// Helper Function for Authentication Errors
-function handleAuthError(req, res, message, email, redirectPath) {
-  req.session.inputData = { hasError: true, message, email, password: "" };
-  req.session.save(() => res.redirect(redirectPath));
-}
 
 module.exports = {
   getSignUp,

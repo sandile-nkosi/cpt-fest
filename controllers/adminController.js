@@ -229,7 +229,6 @@ async function editEvent(req, res, next) {
 }
 
 async function archiveEvent(req, res, next) {
-  console.log("archive event");
   try {
     const { id } = req.params;
     const event = await Event.findByIdAndUpdate(
@@ -242,11 +241,31 @@ async function archiveEvent(req, res, next) {
       return res.status(404).json({ error: "Event not found" });
     }
 
-    res.status(200).redirect("/admin/events/all");
+    res.status(200).redirect("/admin/events/edit/" + id);
   } catch (error) {
     next(error);
   }
 }
+
+async function unarchiveEvent(req, res, next) {
+  try {
+    const { id } = req.params;
+    const event = await Event.findByIdAndUpdate(
+      id,
+      { isArchived: false },
+      { new: true }
+    );
+
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+
+    res.status(200).redirect("/admin/events/edit/" + id);
+  } catch (error) {
+    next(error);
+  }
+}
+
 
 module.exports = {
   getDashboard,
@@ -256,4 +275,5 @@ module.exports = {
   getEditEvent,
   editEvent,
   archiveEvent,
+  unarchiveEvent
 };

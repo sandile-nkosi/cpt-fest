@@ -206,6 +206,25 @@ body {
   transition: all .3s;
 }
 
+.main-dark-button button {
+  display: inline-block;
+  font-size: 14px;
+  padding: 12px 18px;
+  background-color: #343a3e;
+  color: #fff;
+  text-align: center;
+  font-weight: 500;
+  text-transform: capitalize;
+  transition: all .3s;
+}
+
+.button-container {
+  margin-top: 40px;
+  display: flex;
+  gap: 15px; /* Adjust spacing */
+  justify-content: flex-end; /* Aligns buttons at the center */
+}
+
 .main-dark-button a:hover {
   opacity: 0.9;
 }
@@ -1874,8 +1893,12 @@ Tickets Page
   font-weight: 800;
   color: #2a2a2a;
   text-align: center;
-  margin-top: 100px;
-  margin-bottom: 80px;
+  margin-top: 40px;
+}
+
+.tickets-page .heading h3 {
+  color: #2a2a2a;
+  text-align: center;
 }
 
 .tickets-page .ticket-item .thumb {
