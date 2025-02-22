@@ -1,0 +1,140 @@
+/* Page Heading */
+.page-heading-shows-events {
+    text-align: center;
+    padding: 4rem 0;
+    background-image: url(../images/shows_events_bg.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.page-heading-shows-events h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.page-heading-shows-events span {
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+/* Event Listing */
+.shows-events-schedule {
+    padding: 3rem 0;
+}
+
+.ticket-item {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    width: 100%; /* Full width of the column */
+    box-sizing: border-box;
+}
+
+.ticket-item:hover {
+    transform: translateY(-5px);
+}
+
+.thumb img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.down-content {
+    padding: 1rem;
+}
+
+.down-content h4 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.down-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.down-content li {
+    margin-bottom: 0.5rem;
+}
+
+.main-dark-button a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #6a4c93;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 12px;
+    transition: background 0.3s;
+}
+
+.main-dark-button a:hover {
+    background: #4a2f6f;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    justify-content: center;
+    color: #212529!important;
+}
+
+.pagination .page-item {
+    margin: 0 5px;
+}
+
+.pagination .page-link {
+    padding: 0.5rem 1rem;
+    border: 1px solid #6a4c93;
+    border-radius: 8px;
+    color: #6a4c93;
+    text-decoration: none;
+}
+
+.pagination .page-link:hover {
+    background: #6a4c93;
+    color: white;
+}
+
+.pagination .active .page-link {
+    background: #6a4c93;
+    color: white;
+}
+
+.pagination .disabled .page-link {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+
+
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .col-lg-4 {
+        flex: 1 1 calc(50% - 1.5rem); /* Two items per row on medium screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .col-lg-4 {
+        flex: 1 1 100%; /* One item per row on small screens */
+    }
+
+    .thumb img {
+        height: 180px;
+    }
+
+    .down-content h4 {
+        font-size: 1.1rem;
+    }
+
+    .pagination .page-link {
+        padding: 0.5rem;
+    }
+}

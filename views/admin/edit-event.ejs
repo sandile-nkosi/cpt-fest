@@ -1,110 +1,102 @@
-<%- include('../partials/header', { pageTitle: 'Admin Sign In', bootstrap: '../../../css/bootstrap.min.css', fontAwesome: '../../../css/font-awesome.css', carousal: '../../../css/owl-carousel.css', tooplate: '../../../css/tooplate-artxibition.css' }) %>
-<link rel="stylesheet" href="../../../css/admin.css">
+<%- include('../partials/header', { pageTitle: 'One City Events', styles: '../../../css/styles.css', event: '../../../css/event.css'}) %>
 
-<hr class="styled-hr">
 
-<div class="rent-venue-application">
+<div class="rent-venue-application d-flex justify-content-center align-items-center ">
     <div class="container">
         <!-- Search Box and Add New Event Button -->
-        <div class="col-lg-12 mb-4">
-            <div class="search-box p-4 bg-light rounded shadow-sm">
-              <div class="row align-items-center">
-                <div class="col-lg-5">
-                    <div class="search-heading">
-                        <h3 class="mb-0">Edit Event</h3>
-                    </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8 mb-4">
+                <div class="search-box p-4 bg-light rounded shadow-sm text-center">
+                    <h3 class="mb-0">Edit Event</h3>
                 </div>
-              </div>
             </div>
-          </div>
-        <div class="row">
-            <div class="col-lg-9">
+        </div>
+
+        <!-- Main Content -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Contact Form -->
                 <div class="contact-form bg-white p-4 rounded shadow-sm">
                     <form id="contact" action="/admin/events/edit/<%= event._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="_method" value="PUT"> <!-- Enables PUT method -->
-                        <div class="row">
-                            <div class="col-12 mb-3">
-                                <fieldset>
-                                    <input name="title" type="text" id="title" placeholder="Title*" required value="<%= event.title %>">
-                                </fieldset>
+                        
+                        <div class="row g-3">
+                            <!-- Title -->
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input name="title" type="text" class="form-control" id="title" placeholder="Title*" required value="<%= event.title %>">
+                                    <label for="title">Title*</label>
+                                </div>
                             </div>
-                            <div class="col-12 mb-3">
-                                <fieldset>
-                                    <input name="description" type="text" id="description" placeholder="Description*" required value="<%= event.description %>">
-                                </fieldset>
+                    
+                            <!-- Description -->
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input name="description" type="text" class="form-control" id="description" placeholder="Description*" required value="<%= event.description %>">
+                                    <label for="description">Description*</label>
+                                </div>
                             </div>
-                            <div class="col-12 mb-3">
-                                <fieldset>
-                                    <input name="maxAttendees" type="number" id="maxAttendees" placeholder="Max Attendees*" required value="<%= event.maxAttendees %>">
-                                </fieldset>
+                    
+                            <!-- Max Attendees -->
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input name="maxAttendees" type="number" class="form-control" id="maxAttendees" placeholder="Max Attendees*" required value="<%= event.maxAttendees %>">
+                                    <label for="maxAttendees">Max Attendees*</label>
+                                </div>
                             </div>
-                            <div class="col-12 mb-3">
-                                <fieldset>
-                                    <input name="eventDate" type="datetime-local" id="eventDate" 
+                    
+                            <!-- Event Date -->
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input name="eventDate" type="datetime-local" class="form-control" id="eventDate" 
                                         value="<%= event.eventDateTime ? event.eventDateTime.toISOString().slice(0, 16) : '' %>">
-                                </fieldset>
+                                    <label for="eventDate">Event Date and Time*</label>
+                                </div>
                             </div>
-                            <div class="col-12 mb-3">
-                                <fieldset>
-                                    <input name="location" type="text" id="location" placeholder="Location*" required value="<%= event.location %>">
-                                </fieldset>
+                    
+                            <!-- Location -->
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input name="location" type="text" class="form-control" id="location" placeholder="Location*" required value="<%= event.location %>">
+                                    <label for="location">Location*</label>
+                                </div>
                             </div>
-                            <div class="col-12 mb-3">
-                                <fieldset>
-                                    <label>Current Image:</label>
+                    
+                            <!-- Current Image and File Upload -->
+                            <div class="col-12">
+                                <div class="mb-3 text-center">
+                                    <label for="eventImage" class="form-label">Current Image:</label>
                                     <br>
-                                    <img src="<%= event.imageUrl %>" alt="Event Image" style="max-width: 150px;">
+                                    <img src="<%= event.imageUrl %>" alt="Event Image" class="img-thumbnail" style="max-width: 150px;">
                                     <br><br>
-                                    <input name="eventImage" type="file" id="eventImage">
-                                    <p style="font-size: 12px;">(Leave blank to keep the current image)</p>
-                                </fieldset>
+                                    <input name="eventImage" type="file" class="form-control" id="eventImage">
+                                    <div class="form-text">(Leave blank to keep the current image)</div>
+                                </div>
                             </div>
                         </div>
-                
+                    
                         <!-- Buttons Section -->
-                        <div class="button-container">
-                            <button type="submit" id="form-submit" class="btn btn-dark w-100n">Update Event</button>
+                        <div class="button-container mt-4 text-center">
+                            <button type="submit" id="form-submit" class="btn btn-dark w-100">Update Event</button>
                         </div>
                     </form>
                 
-                    <!-- Archive Event Form (Placed Outside Main Form) -->
-                    <% if (event.isArchived) {%>
-                        <div class="button-container">
+                    <!-- Archive/Unarchive Event Form -->
+                    <div class="button-container mt-3 text-center">
+                        <% if (event.isArchived) { %>
                             <form action="/admin/events/unarchive/<%= event._id %>" method="post">
-                                <button class="btn btn-dark w-100n">Unarchive Event</button>
+                                <button type="submit" class="btn btn-outline-dark w-100">Unarchive Event</button>
                             </form>
-                        </div>
-                    <%}else {%>
-                       <div class="button-container">
+                        <% } else { %>
                             <form action="/admin/events/archive/<%= event._id %>" method="post">
-                                <button class="btn btn-dark w-100n">Archive Event</button>
+                                <button type="submit" class="btn btn-outline-dark w-100">Archive Event</button>
                             </form>
-                        </div> 
-                    <%}%>   
-                </div>  
+                        <% } %>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- jQuery -->
-<script src="../../../scripts/jquery-2.1.0.min.js"></script>
-
-<!-- Bootstrap -->
-<script src="../../../scripts/popper.js"></script>
-<script src="../../../scripts/bootstrap.min.js"></script>
-
-<!-- Plugins -->
-<script src="../../../scripts/scrollreveal.min.js"></script>
-<script src="../../../scripts/waypoints.min.js"></script>
-<script src="../../../scripts/jquery.counterup.min.js"></script>
-<script src="../../../scripts/imgfix.min.js"></script> 
-<script src="../../../scripts/mixitup.js"></script> 
-<script src="../../../scripts/accordions.js"></script>
-<script src="../../../scripts/owl-carousel.js"></script>
-
-<!-- Global Init -->
-<script src="../../../scripts/custom.js"></script>
-
-</body>
-</html>
+<%- include('../partials/footer') %>

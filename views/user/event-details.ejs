@@ -1,10 +1,4 @@
-<%- include('../partials/header', { 
-    pageTitle: event.title, 
-    bootstrap: '../../css/bootstrap.min.css', 
-    fontAwesome: '../../css/font-awesome.css', 
-    carousal: '../../css/owl-carousel.css', 
-    tooplate: '../../css/tooplate-artxibition.css' 
-}) %>
+<%- include('../partials/header', { pageTitle: 'One City Events', styles: '../../css/styles.css', event: '../../css/event.css'}) %>
 
 <script>
     // Make sure initMap is attached to the global window object
@@ -39,8 +33,8 @@
     <div class="container">
         <div class="row text-center">
             <div class="col-lg-12">
-                <h2 class="text-light mb-3">RSVP Now!</h2>
-                <span class="text-light fs-5">Check out upcoming and past shows & events and RSVP right now.</span>
+                <h2 class="text-light mb-3"><%= event.title %></h2>
+                <span class="text-light fs-5">RSVP below.</span>
             </div>
         </div>
     </div>
@@ -113,12 +107,12 @@
                     <div class="total mt-4">
                         <div class="main-dark-button">
                             <% if (user == null) { %>
-                                <button class="dashboard-dark-button w-100" disabled>Sign In to RSVP</button>
+                                <button class="btn btn-dark w-100" disabled>Sign In to RSVP</button>
                             <% } else { %>
                                 <% if (isRSVPed) { %>
-                                    <button class="dashboard-dark-button w-100" data-event-id="<%= event._id %>" data-rsvped="true">Cancel RSVP</button>
+                                    <button class="btn btn-dark w-100" data-event-id="<%= event._id %>" data-rsvped="true">Cancel RSVP</button>
                                 <% } else { %>
-                                    <button class="dashboard-dark-button w-100" data-event-id="<%= event._id %>" data-rsvped="false">Click to RSVP</button>
+                                    <button class="btn btn-dark w-100" data-event-id="<%= event._id %>" data-rsvped="false">Click to RSVP</button>
                                 <% } %>
                             <% } %>
                         </div>
@@ -132,32 +126,12 @@
     </div>
 </div>
 
-
-<%- include('../partials/footer') %>
-
 <!-- jQuery -->
 <script src="../../scripts/jquery-2.1.0.min.js"></script>
 
-<!-- Bootstrap -->
-<script src="../../scripts/popper.js"></script>
-<script src="../../scripts/bootstrap.min.js"></script>
-
-<!-- Plugins -->
-<script src="../../scripts/scrollreveal.min.js"></script>
-<script src="../../scripts/waypoints.min.js"></script>
-<script src="../../scripts/jquery.counterup.min.js"></script>
-<script src="../../scripts/imgfix.min.js"></script> 
-<script src="../../scripts/mixitup.js"></script> 
-<script src="../../scripts/accordions.js"></script>
-<script src="../../scripts/owl-carousel.js"></script>
-
-<!-- Global Init -->
-<script src="../../scripts/custom.js"></script>
-
-
 <script>
     $(document).ready(function() {
-        $(".dashboard-dark-button").on("click", function() {
+        $(".btn").on("click", function() {
             const button = $(this);
             const eventId = button.data("event-id");
             const isRSVPed = button.data("rsvped"); // Boolean status
@@ -184,5 +158,4 @@
     });
 </script>
 
-</body>
-</html>
+<%- include('../partials/footer') %>

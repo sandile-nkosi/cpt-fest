@@ -1,88 +1,82 @@
-<%- include('../partials/header', { pageTitle: 'Admin Add New Event', bootstrap: '../../css/bootstrap.min.css', fontAwesome: '../../css/font-awesome.css', carousal: '../../css/owl-carousel.css', tooplate: '../../css/tooplate-artxibition.css' }) %>
-<link rel="stylesheet" href="../../css/admin.css">
+<%- include('../partials/header', { pageTitle: 'Add New Event', styles: '../../../css/styles.css', event: '../../../css/event.css'}) %>
+<link rel="stylesheet" href="../../../css/admin.css">
 
-<hr class="styled-hr">
-
-    <div class="rent-venue-application">
-        <div class="container">
-          <!-- Search Box and Add New Event Button -->
-          <div class="col-lg-12 mb-4">
-            <div class="search-box p-4 bg-light rounded shadow-sm">
-              <div class="row align-items-center">
-                <div class="col-lg-5">
-                    <div class="search-heading">
-                        <h3 class="mb-0">Add New Event</h3>
-                    </div>
-                </div>
+<div class="rent-venue-application d-flex justify-content-center align-items-center min-vh-100">
+  <div class="container">
+      <!-- Search Box and Add New Event Button -->
+      <div class="row justify-content-center">
+          <div class="col-lg-8 mb-4">
+              <div class="search-box p-4 bg-light rounded shadow-sm text-center">
+                  <h3 class="mb-0">Add New Event</h3>
               </div>
-            </div>
           </div>
-            <div class="row">
-                <div class="col-lg-9">
-                    <div class="contact-form bg-white p-4 rounded shadow-sm">
-                      <form id="contact" action="/admin/events/new" method="post" enctype="multipart/form-data">
-                        <div class="row">
-                          <div class="col-12 mb-3">
-                            <fieldset>
-                              <input name="title" type="text" id="title" placeholder="Title*">
-                            </fieldset>
-                          </div>
-                          <div class="col-12 mb-3">
-                            <fieldset>
-                              <input name="description" type="text" id="description" placeholder="Description*">
-                            </fieldset>
-                          </div>
-                          <div class="col-12 mb-3">
-                            <fieldset>
-                              <input name="maxAttendees" type="number" id="maxAttendees" placeholder="Max Attendees*">
-                            </fieldset>
-                          </div>
-                          <div class="col-12 mb-3">
-                            <fieldset>
-                              <input name="eventDate" type="datetime-local" id="eventDate" >
-                            </fieldset>
-                          </div>
-                          <div class="col-12 mb-3">
-                            <fieldset>
-                              <input name="location" type="text" id="location" placeholder="Location*" required>
-                            </fieldset>
-                          </div>
-                          <div class="col-12 mb-3">
-                            <fieldset>
-                              <input name="eventImage" type="file" id="eventImage" placeholder="Event Image*" required>
-                            </fieldset>
-                          </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="row justify-content-center">
+          <div class="col-lg-8">
+              <!-- Contact Form -->
+              <div class="contact-form bg-white p-4 rounded shadow-sm">
+                  <form id="contact" action="/admin/events/new" method="post" enctype="multipart/form-data">
+                      <div class="row g-3">
+                          <!-- Title -->
                           <div class="col-12">
-                            <fieldset>
-                              <button type="submit" id="form-submit" class="btn btn-dark w-100n">Add Event</button>
-                            </fieldset>
+                              <div class="form-floating">
+                                  <input name="title" type="text" class="form-control" id="title" placeholder="Title*" required>
+                                  <label for="title">Title*</label>
+                              </div>
                           </div>
-                        </div>
-                      </form>
-                    </div>                    
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- jQuery -->
-    <script src="../../scripts/jquery-2.1.0.min.js"></script>
+                          <!-- Description -->
+                          <div class="col-12">
+                              <div class="form-floating">
+                                  <input name="description" type="text" class="form-control" id="description" placeholder="Description*" required>
+                                  <label for="description">Description*</label>
+                              </div>
+                          </div>
 
-    <!-- Bootstrap -->
-    <script src="../../scripts/popper.js"></script>
-    <script src="../../scripts/bootstrap.min.js"></script>
+                          <!-- Max Attendees -->
+                          <div class="col-12">
+                              <div class="form-floating">
+                                  <input name="maxAttendees" type="number" class="form-control" id="maxAttendees" placeholder="Max Attendees*" required>
+                                  <label for="maxAttendees">Max Attendees*</label>
+                              </div>
+                          </div>
 
-    <!-- Plugins -->
-    <script src="../../scripts/scrollreveal.min.js"></script>
-    <script src="../../scripts/waypoints.min.js"></script>
-    <script src="../../scripts/jquery.counterup.min.js"></script>
-    <script src="../../scripts/imgfix.min.js"></script> 
-    <script src="../../scripts/mixitup.js"></script> 
-    <script src="../../scripts/accordions.js"></script>
-    <script src="../../scripts/owl-carousel.js"></script>
-    
-    <!-- Global Init -->
-    <script src="../../scripts/custom.js"></script>
+                          <!-- Event Date -->
+                          <div class="col-12">
+                              <div class="form-floating">
+                                  <input name="eventDate" type="datetime-local" class="form-control" id="eventDate" required>
+                                  <label for="eventDate">Event Date and Time*</label>
+                              </div>
+                          </div>
 
-  </body>
-</html>
+                          <!-- Location -->
+                          <div class="col-12">
+                              <div class="form-floating">
+                                  <input name="location" type="text" class="form-control" id="location" placeholder="Location*" required>
+                                  <label for="location">Location*</label>
+                              </div>
+                          </div>
+
+                          <!-- Event Image -->
+                          <div class="col-12">
+                              <div class="form-floating">
+                                  <input name="eventImage" type="file" class="form-control" id="eventImage" required>
+                                  <label for="eventImage">Event Image*</label>
+                              </div>
+                          </div>
+                      </div>
+
+                      <!-- Buttons Section -->
+                      <div class="button-container mt-4 text-center">
+                          <button type="submit" id="form-submit" class="btn btn-dark w-100">Add Event</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

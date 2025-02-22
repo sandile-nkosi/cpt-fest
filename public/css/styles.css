@@ -1,0 +1,314 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and HTML */
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #f9f6f2;
+    color: #4a4a4a;
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    text-decoration: none;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header Styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #333;
+    color: #fff;
+    position: relative;
+}
+
+.logo a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+}
+
+.nav-list {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+}
+
+.nav-list li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.nav-list li a:hover {
+    color: #ff6347;
+}
+
+.nav-list li a.active {
+    color: #ff6347;
+    font-weight: bold;
+}
+
+/* Admin Login Section */
+.admin-login .login-btn,
+.admin-login .logout-btn {
+    padding: 0.5rem 1rem;
+    background-color: #ff6347;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.admin-login .login-btn:hover,
+.admin-login .logout-btn:hover {
+    background-color: #e5533d;
+}
+
+/* Mobile Menu Toggle */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.menu-toggle .bar {
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    margin: 4px 0;
+    transition: 0.4s;
+}
+
+.page-heading-rent-venue {
+    background-image: url(../images/rent_venue_bg.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.page-heading-rent-venue h2 span {
+    color: #fff;
+}
+
+.main-banner {
+    background-image: url('/images/cpt1.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .nav-list {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: #333;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        padding: 1rem;
+        z-index: 1000;
+    }
+
+    .nav-list.active {
+        display: flex;
+    }
+
+    .menu-toggle {
+        display: flex;
+    }
+
+    .menu-toggle.active .bar:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+    }
+
+    .menu-toggle.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle.active .bar:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
+    }
+}
+
+/* Main Banner */
+.main-banner {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.main-content h3 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.main-content h4 {
+    font-size: 1.5rem;
+    margin: 1rem 0;
+}
+
+.event-button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: #6a4c93;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 12px;
+    transition: background 0.3s;
+}
+
+.event-button:hover {
+    background: #4a2f6f;
+}
+
+/* Event Carousel */
+.show-events-carousel {
+    padding: 3rem 0;
+    overflow: hidden; /* Hide the overflow to prevent showing extra cards */
+}
+
+.carousel-wrapper {
+    display: flex;
+    transition: transform 0.5s ease; /* Smooth sliding transition */
+    gap: 1rem; /* Space between cards */
+}
+
+.carousel-item {
+    flex: 0 0 calc(33.333% - 1rem); /* Each card takes 1/3 of the carousel width */
+    box-sizing: border-box;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
+    max-height: 400px;
+}
+
+/* Ensure only the required number of cards are visible */
+#eventCarousel {
+    overflow: hidden;
+}
+
+/* Carousel Controls */
+.carousel-control-prev,
+.carousel-control-next {
+    filter: invert(1); /* Ensure arrows are visible */
+    z-index: 10; /* Ensure controls stay above the carousel */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .carousel-item {
+        flex: 0 0 calc(50% - 1rem); /* Two cards on medium screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .carousel-item {
+        flex: 0 0 100%; /* Single card on small screens */
+    }
+}
+
+
+/* Venues & Tickets */
+.venue-tickets .section-heading {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.venue-tickets h2 {
+    font-size: 2rem;
+}
+
+/* Coming Events */
+.coming-events {
+    padding: 3rem 0;
+}
+
+.discover-more {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.event-card {
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+}
+
+.event-card img {
+    width: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.event-card h4 {
+    margin: 1rem 0 0.5rem;
+    font-size: 1.25rem;
+}
+
+.event-card p {
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .carousel-item {
+        flex: 0 0 100%;
+    }
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #333;
+    color: #fff;
+    margin-top: auto;
+}
+
+/* Carousel Controls */
+.carousel-control-prev, .carousel-control-next {
+    filter: invert(1);
+}

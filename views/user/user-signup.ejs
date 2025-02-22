@@ -1,88 +1,90 @@
-<%- include('../partials/header', { pageTitle: 'User Sign Up', bootstrap: '../css/bootstrap.min.css', fontAwesome: '../css/font-awesome.css', carousal: '../css/owl-carousel.css', tooplate: '../css/tooplate-artxibition.css' }) %>
+<%- include('../partials/header', { pageTitle: 'One City Events', styles: '../css/styles.css', event: '../css/event.css'}) %>
 
-    <!-- ***** About Us Page ***** -->
-    <div class="page-heading-rent-venue">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2>Do you want to attend one or more of our events?</h2>
-                    <span>Sign up below and get started!</span>
+<!-- ***** About Us Page ***** -->
+<div class="page-heading-rent-venue">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>Do you want to attend one or more of our events?</h2>
+                <span>Sign up below and get started!</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ***** Rent Venue Application Form ***** -->
+<div class="rent-venue-application d-flex justify-content-center align-items-center py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-12">
+                <!-- Heading -->
+                <div class="heading-text text-center mb-4">
+                    <h4>New Users</h4>
+                </div>
+
+                <!-- Error Message -->
+                <% if (sessionData.errorMessage) { %>
+                    <div class="alert alert-danger text-center mb-4">
+                        <%= sessionData.errorMessage %>
+                    </div>
+                <% } %>
+
+                <!-- Contact Form -->
+                <div class="contact-form bg-white p-4 rounded shadow-sm">
+                    <form id="contact" action="/auth/signup" method="post">
+                        <div class="row g-3">
+                            <!-- Full Name -->
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input name="fullName" type="text" id="fullName" class="form-control" placeholder="Full Name*" required value="<%=sessionData.fullName%>">
+                                    <label for="fullName">Full Name*</label>
+                                </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input name="email" type="email" id="email" class="form-control" placeholder="Your Email*" required>
+                                    <label for="email">Your Email*</label>
+                                </div>
+                            </div>
+
+                            <!-- City -->
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input name="city" type="text" id="city" class="form-control" placeholder="City*" required value="<%=sessionData.city%>">
+                                    <label for="city">City*</label>
+                                </div>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input name="password" type="password" id="password" class="form-control" placeholder="Password*" required>
+                                    <label for="password">Password*</label>
+                                </div>
+                            </div>
+
+                            <!-- Confirm Password -->
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input name="passwordConfirm" type="password" id="passwordConfirm" class="form-control" placeholder="Confirm Password*" required>
+                                    <label for="passwordConfirm">Confirm Password*</label>
+                                </div>
+                            </div>
+
+                            <!-- Sign Up Button -->
+                            <div class="col-12">
+                                <button type="submit" id="form-submit" class="btn btn-dark w-100">Sign Up</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-
-<!-- ***** Rent Venue Application Form ***** -->
-<div class="rent-venue-application py-5">
-  <div class="container">
-      <div class="row justify-content-center">
-          <div class="col-lg-6 col-md-8 col-sm-12">
-              <div class="heading-text text-center mb-4">
-                  <h4>New Users</h4>
-              </div>
-
-              <% if (sessionData.errorMessage) { %>
-                  <div class="alert alert-danger text-center mb-4">
-                      <%= sessionData.errorMessage %>
-                  </div>
-              <% } %>
-
-              <div class="contact-form bg-white p-4 rounded shadow-sm">
-                  <form id="contact" action="/auth/signup" method="post">
-                    <div class="row">
-                      <div class="col-12 mb-3">
-                        <input name="fullName" type="text" id="fullName" class="form-control" placeholder="Full Name*" required value="<%=sessionData.fullName%>">
-                      </div>
-                      
-                      <div class="col-12 mb-3">
-                        <input name="email" type="text" id="email" pattern="[^ @]*@[^ @]*" class="form-control" placeholder="Your Email*" required="">
-                    </div>
-
-                      <div class="col-12 mb-3">
-                          <input name="city" type="text" id="city" class="form-control" placeholder="City*" required value="<%=sessionData.city%>">
-                      </div>
-
-                      <div class="col-12 mb-3">
-                          <input name="password" type="password" id="password" class="form-control" placeholder="Password*" required>
-                      </div>
-
-                      <div class="col-12 mb-3">
-                          <input name="passwordConfirm" type="password" id="passwordConfirm" class="form-control" placeholder="Confirm Password*" required>
-                      </div>
-
-                      <div class="col-12">
-                          <button type="submit" id="form-submit" class="btn btn-dark w-100">Sign Up</button>
-                      </div>
-                    </div>
-                  </form>
-              </div>
-          </div>
-      </div>
-  </div>
 </div>
 
 
 
 <%- include('../partials/footer') %>
-
-    <!-- jQuery -->
-    <script src="../scripts/jquery-2.1.0.min.js"></script>
-
-    <!-- Bootstrap -->
-    <script src="../scripts/popper.js"></script>
-    <script src="../scripts/bootstrap.min.js"></script>
-
-    <!-- Plugins -->
-    <script src="../scripts/scrollreveal.min.js"></script>
-    <script src="../scripts/waypoints.min.js"></script>
-    <script src="../scripts/jquery.counterup.min.js"></script>
-    <script src="../scripts/imgfix.min.js"></script> 
-    <script src="../scripts/mixitup.js"></script> 
-    <script src="../scripts/accordions.js"></script>
-    <script src="../scripts/owl-carousel.js"></script>
-    
-    <!-- Global Init -->
-    <script src="../scripts/custom.js"></script>
-
-  </body>
-</html>

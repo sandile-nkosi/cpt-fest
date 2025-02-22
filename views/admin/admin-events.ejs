@@ -1,5 +1,5 @@
-<%- include('../partials/header', { pageTitle: 'Admin All Events', bootstrap: '../../css/bootstrap.min.css', fontAwesome: '../../css/font-awesome.css', carousal: '../../css/owl-carousel.css', tooplate: '../../css/tooplate-artxibition.css' }) %>
-<link rel="stylesheet" href="../../css/admin.css">
+<%- include('../partials/header', { pageTitle: 'One City Events', styles: '../../css/styles.css', event: '../../css/event.css'}) %>
+
 
 
 <hr class="styled-hr">
@@ -11,13 +11,8 @@
                     <div class="search-box p-4 bg-light rounded shadow-sm">
                         <form id="subscribe" action="" method="get">
                             <div class="row align-items-center">
-                                <div class="col-lg-5">
-                                    <div class="search-heading">
-                                        <h3 class="mb-0">Manage Events</h3>
-                                    </div>
-                                </div>
                                 <div class="col-lg-7 text-end">
-                                    <a class="btn btn-dark btn-lg" href="/admin/events/new">Add New Event</a>
+                                    <a class="btn btn-dark" href="/admin/events/new">Add New Event</a>
                                 </div>
                             </div>
                         </form>
@@ -132,24 +127,4 @@
         </div>
     </div>
 
-    <!-- jQuery -->
-    <script src="../../scripts/jquery-2.1.0.min.js"></script>
-
-    <!-- Bootstrap -->
-    <script src="../../scripts/popper.js"></script>
-    <script src="../../scripts/bootstrap.min.js"></script>
-
-    <!-- Plugins -->
-    <script src="../../scripts/scrollreveal.min.js"></script>
-    <script src="../../scripts/waypoints.min.js"></script>
-    <script src="../../scripts/jquery.counterup.min.js"></script>
-    <script src="../../scripts/imgfix.min.js"></script> 
-    <script src="../../scripts/mixitup.js"></script> 
-    <script src="../../scripts/accordions.js"></script>
-    <script src="../../scripts/owl-carousel.js"></script>
-    
-    <!-- Global Init -->
-    <script src="../../scripts/custom.js"></script>
-
-  </body>
-</html>
+<%- include('../partials/footer') %>

@@ -1,120 +1,96 @@
-<%- include('../partials/header', { pageTitle: 'All Events', bootstrap: '../css/bootstrap.min.css', fontAwesome: '../css/font-awesome.css', carousal: '../css/owl-carousel.css', tooplate: '../css/tooplate-artxibition.css' }) %>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<%- include('../partials/header', { pageTitle: 'One City Events', styles: '../css/styles.css', event: '../css/event.css'}) %>
 
-<link rel="stylesheet" href="../../css/admin.css">
 
-    <!-- ***** About Us Page ***** -->
-    <div class="page-heading-shows-events">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2>Event Listing</h2>
-                    <span>Explore all upcoming events and book your tickets now.</span>
-                </div>
+<!-- ***** About Us Page ***** -->
+<div class="page-heading-shows-events">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>Event Listing</h2>
+                <span>Explore all upcoming events and book your tickets now.</span>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="shows-events-schedule py-5 bg-light">
-        <div class="container">
-            <div class="row">
-                <!-- Event List -->
-                <div class="col-lg-12">
-                    <div class="row">
-                        <% for (const event of events) { %>
-                        <div class="col-lg-4 mb-4">
-                            <div class="ticket-item card h-100 shadow-sm">
-                                <div class="thumb">
-                                    <img src="<%= event.imageUrl %>" alt="<%= event.title %>" class="card-img-top">
-                                </div>
-                                <div class="down-content card-body">
-                                    <span class="badge bg-warning text-dark mb-3">
-                                        <%= event.maxAttendees - event.rsvps.length %> Tickets Left
-                                    </span>
-                                    <h4 class="card-title"><%= event.title %></h4>
-                                    <ul class="list-unstyled">
-                                        <li class="mb-2">
-                                            <i class="fa fa-clock-o"></i> <%= event.eventDateTime %>
-                                        </li>
-                                        <li class="mb-2">
-                                            <i class="fa fa-map-marker"></i> <%= event.location %>
-                                        </li>
-                                    </ul>
-                                    <!-- View Event Details Button -->
-                                    <div class="text-center">
-                                        <div class="main-dark-button">
-                                            <a href="/user/events/<%= event._id %>" class="btn btn-dark btn-lg">View Details</a>
-                                        </div>
+<div class="shows-events-schedule py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <!-- Event List -->
+            <div class="col-lg-12">
+                <div class="row">
+                    <% for (const event of events) { %>
+                    <div class="col-lg-4 mb-4">
+                        <div class="ticket-item card h-100 shadow-sm">
+                            <div class="thumb">
+                                <img src="<%= event.imageUrl %>" alt="<%= event.title %>" class="card-img-top">
+                            </div>
+                            <div class="down-content card-body">
+                                <span class="badge bg-warning text-dark mb-3">
+                                    <%= event.maxAttendees - event.rsvps.length %> Tickets Left
+                                </span>
+                                <h4 class="card-title"><%= event.title %></h4>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">
+                                        <i class="fa fa-clock-o"></i> <%= event.eventDateTime %>
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fa fa-map-marker"></i> <%= event.location %>
+                                    </li>
+                                </ul>
+                                <!-- View Event Details Button -->
+                                <div class="text-center">
+                                    <div class="main-dark-button">
+                                        <a href="/user/events/<%= event._id %>" class="btn btn-dark btn-lg">View Details</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <% } %>
                     </div>
-                </div>
-    
-                <!-- Pagination -->
-                <div class="col-lg-12">
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-center mt-4">
-                            <!-- Previous Button -->
-                            <% if (currentPage > 1) { %>
-                                <li class="page-item">
-                                    <a class="page-link text-dark border-dark" href="/user/events?page=<%= currentPage - 1 %>">Prev</a>
-                                </li>
-                            <% } else { %>
-                                <li class="page-item disabled">
-                                    <a class="page-link text-dark border-dark" href="#" tabindex="-1" aria-disabled="true">Prev</a>
-                                </li>
-                            <% } %>
-
-                            <!-- Page Numbers -->
-                            <% for (let i = 1; i <= totalPages; i++) { %>
-                                <li class="page-item <%= i === currentPage ? 'active' : '' %>">
-                                    <a class="page-link <%= i === currentPage ? 'bg-dark text-white' : 'text-dark' %> border-dark" href="/user/events?page=<%= i %>"><%= i %></a>
-                                </li>
-                            <% } %>
-
-                            <!-- Next Button -->
-                            <% if (currentPage < totalPages) { %>
-                                <li class="page-item">
-                                    <a class="page-link text-dark border-dark" href="/user/events?page=<%= currentPage + 1 %>">Next</a>
-                                </li>
-                            <% } else { %>
-                                <li class="page-item disabled">
-                                    <a class="page-link text-dark border-dark" href="#" tabindex="-1" aria-disabled="true">Next</a>
-                                </li>
-                            <% } %>
-                        </ul>
-                    </nav>
+                    <% } %>
                 </div>
             </div>
+
+            <!-- Pagination -->
+            <div class="col-lg-12">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center mt-4">
+                        <!-- Previous Button -->
+                        <% if (currentPage > 1) { %>
+                            <li class="page-item">
+                                <a class="page-link text-dark border-dark" href="/user/events?page=<%= currentPage - 1 %>">Prev</a>
+                            </li>
+                        <% } else { %>
+                            <li class="page-item disabled">
+                                <a class="page-link text-dark border-dark" href="#" tabindex="-1" aria-disabled="true">Prev</a>
+                            </li>
+                        <% } %>
+
+                        <!-- Page Numbers -->
+                        <% for (let i = 1; i <= totalPages; i++) { %>
+                            <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                                <a class="page-link <%= i === currentPage ? 'bg-dark text-white' : 'text-dark' %> border-dark" href="/user/events?page=<%= i %>"><%= i %></a>
+                            </li>
+                        <% } %>
+
+                        <!-- Next Button -->
+                        <% if (currentPage < totalPages) { %>
+                            <li class="page-item">
+                                <a class="page-link text-dark border-dark" href="/user/events?page=<%= currentPage + 1 %>">Next</a>
+                            </li>
+                        <% } else { %>
+                            <li class="page-item disabled">
+                                <a class="page-link text-dark border-dark" href="#" tabindex="-1" aria-disabled="true">Next</a>
+                            </li>
+                        <% } %>
+                    </ul>
+                </nav>
+            </div>
         </div>
-    </div>    
+    </div>
+</div>
+ 
+<%- include('../partials/footer') %>
 
-    <%- include('../partials/footer') %>
-
-    <!-- jQuery -->
-    <script src="../scripts/jquery-2.1.0.min.js"></script>
-
-    <!-- Bootstrap -->
-    <script src="../scripts/popper.js"></script>
-    <script src="../scripts/bootstrap.min.js"></script>
-
-    <!-- Plugins -->
-    <script src="../scripts/scrollreveal.min.js"></script>
-    <script src="../scripts/waypoints.min.js"></script>
-    <script src="../scripts/jquery.counterup.min.js"></script>
-    <script src="../scripts/imgfix.min.js"></script> 
-    <script src="../scripts/mixitup.js"></script> 
-    <script src="../scripts/accordions.js"></script>
-    <script src="../scripts/owl-carousel.js"></script>
-    
-    <!-- Global Init -->
-    <script src="../scripts/custom.js"></script>
-
-  </body>
-
-</html>
 
 
