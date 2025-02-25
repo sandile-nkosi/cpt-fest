@@ -1,43 +1,95 @@
 const Admin = require("../models/Admin");
+const User = require("../models/User");
 const Event = require("../models/Event");
 const axios = require("axios");
 const moment = require('moment-timezone'); // Import moment-timezone
 
+//admin gets
+
 async function getDashboard(req, res) {
-  const adminId = req.session.admin ? req.session.admin.uid : null; // Check if admin is logged in
+  const adminId = req.session.admin ? req.session.admin.uid : null;
 
   if (!adminId) {
     return res.redirect("/auth/admin/signin");
   }
 
-  const admin = await Admin.findById(adminId).exec(); // Fetch admin info
+  const admin = await Admin.findById(adminId).exec();   
 
+  const users = await User.find();
   const events = await Event.find({ isArchived: false })
     .populate("rsvps", "fullName email")
     .populate("ratings.user", "fullName email");
 
-  const eventStats = events.map(event => ({
-    title: event.title,
-    maxAttendees: event.maxAttendees,
-    attendeeCount: event.rsvps.length,
-    avgRating: event.ratings.length
-      ? (event.ratings.reduce((sum, r) => sum + r.rating, 0) / event.ratings.length).toFixed(1)
-      : 0
-  }));
+  // Age Distribution
+  const ageDistribution = users.reduce((acc, user) => {
+    acc[user.age] = (acc[user.age] || 0) + 1;
+    return acc;
+  }, {});
 
-  res.locals.admin = admin; // Available in all views
+  // Gender Distribution
+  const genderDistribution = users.reduce((acc, user) => {
+    acc[user.gender] = (acc[user.gender] || 0) + 1;
+    return acc;
+  }, {});
 
-  res.render("admin/dashboard", { admin, events, eventStats }); // Pass data to the view
+  // Events by Province (Total RSVPs and Max Attendees)
+  const provinceData = await Event.aggregate([
+    {
+      $group: {
+        _id: "$title", // Group by province (assuming `location` stores the province)
+        totalRSVPs: { $sum: { $size: "$rsvps" } }, // Sum the number of RSVPs
+        totalMaxAttendees: { $sum: "$maxAttendees" } // Sum the maxAttendees
+      }
+    },
+    {
+      $project: {
+        province: "$_id",
+        totalRSVPs: 1,
+        totalMaxAttendees: 1,
+        _id: 0 // Exclude the default _id field
+      }
+    }
+  ]);
+
+  // Convert the array of objects into a single object keyed by province
+  const eventsByProvince = {};
+  provinceData.forEach(province => {
+    eventsByProvince[province.province] = {
+      totalRSVPs: province.totalRSVPs,
+      totalMaxAttendees: province.totalMaxAttendees
+    };
+  });
+
+  // Average Event Ratings
+  const averageRatings = events.length
+    ? (
+        events.reduce(
+          (sum, event) =>
+            sum +
+            (event.ratings.length
+              ? event.ratings.reduce((s, r) => s + r.rating, 0) /
+                event.ratings.length
+              : 0),
+          0
+        ) / events.length
+      ).toFixed(1)
+    : 0;
+
+  res.render("admin/dashboard", {
+    admin,
+    ageDistribution,
+    genderDistribution,
+    eventsByProvince,
+    averageRatings,
+  });
 }
 
 
-//admin gets
 
 async function getAllEvents(req, res) {
   const EVENTS_PER_PAGE = 5; // Set the number of events per page to 5
   const page = parseInt(req.query.page) || 1; // Get the current page from query string, default to page 1
-
-  const adminId = req.session.admin.uid; // Ensure session contains admin ID
+  const adminId = req.session.admin ? req.session.admin.uid : null;
 
   if (!adminId) {
     return res.redirect("/auth/admin/signin");

@@ -132,8 +132,6 @@ async function toggleRSVP(req, res) {
     return res.status(401).json({ error: "User not authenticated" });
   }
 
-  console.log("User ID: ", userId);
-
   const user = userId ? await User.findById(userId).exec() : null; // Only fetch user if logged in
   const eventId = req.params.eventId;
   const session = await mongoose.startSession();

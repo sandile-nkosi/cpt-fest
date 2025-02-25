@@ -4,6 +4,7 @@ const authenticationUtil = require("../util/authentication");
 const validationUtil = require("../util/validation");
 const sessionFlash = require("../util/session-flash");
 const bcrypt = require("bcryptjs");
+const sendMail = require("../middleware/mailer");
 
 // GET Routes
 
@@ -42,42 +43,93 @@ function getAdminSignIn(req, res) {
 // POST Routes
 
 async function signUp(req, res, next) {
-  const { fullName, city, email, password, passwordConfirm } = req.body;
+  const {
+    fullName,
+    displayName,
+    email,
+    password,
+    passwordConfirm,
+    age,
+    gender,
+    province,
+  } = req.body;
 
+  // Validate user details
   if (
-    !validationUtil.userDetailsValid(email, password, fullName, city) ||
+    !validationUtil.userDetailsValid(
+      email,
+      password,
+      fullName,
+      displayName,
+      age,
+      gender,
+      province
+    ) ||
     !validationUtil.passwordMatch(password, passwordConfirm)
   ) {
-    return sessionFlash.flashDataToSession(req, {
-      errorMessage:
-        "Invalid input. Ensure passwords match, email is valid, and password is at least 6 characters.",
-      fullName,
-      city,
-      email,
-    }, () => res.redirect("/auth/signup"));
+    return sessionFlash.flashDataToSession(
+      req,
+      {
+        errorMessage:
+          "Invalid input. Ensure passwords match, email is valid, and all fields are filled.",
+        fullName,
+        displayName,
+        email,
+        age,
+        gender,
+        province,
+      },
+      () => res.redirect("/auth/signup")
+    );
   }
 
   try {
+    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return sessionFlash.flashDataToSession(req, {
-        errorMessage: "User already exists. Please sign in.",
-        fullName,
-        city,
-        email,
-      }, () => res.redirect("/auth/signup"));
+      return sessionFlash.flashDataToSession(
+        req,
+        {
+          errorMessage: "User already exists. Please sign in.",
+          fullName,
+          displayName,
+          email,
+          age,
+          gender,
+          province,
+        },
+        () => res.redirect("/auth/signup")
+      );
     }
 
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
-    const user = await User.create({ fullName, city, email, password: hashedPassword });
+
+    // Create new user
+    const user = await User.create({
+      fullName,
+      displayName,
+      email,
+      password: hashedPassword,
+      age,
+      gender,
+      province,
+    });
 
     if (!user) {
-      return sessionFlash.flashDataToSession(req, {
-        errorMessage: "User creation failed. Please try again.",
-        fullName,
-        city,
-        email,
-      }, () => res.redirect("/auth/signup"));
+      return sessionFlash.flashDataToSession(
+        req,
+        {
+          errorMessage: "User creation failed. Please try again.",
+          fullName,
+          displayName,
+          email,
+          age,
+          gender,
+          province,
+        },
+        () => res.redirect("/auth/signup")
+      );
     }
 
     // Send welcome email
@@ -96,6 +148,7 @@ async function signUp(req, res, next) {
     };
     sendMail(mailOptions);
 
+    // Redirect to sign-in page
     res.redirect("/auth/signin");
   } catch (error) {
     next(error);

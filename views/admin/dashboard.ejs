@@ -1,63 +1,184 @@
 <%- include('../partials/header', { pageTitle: 'One City Events', styles: '../css/styles.css', event: '../css/event.css'}) %>
 
-
-<hr class="styled-hr">
 <div class="tickets-page">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <div class="heading">
                     <h2>Admin Dashboard</h2>
-                    <div id="printable-area">
-                        <div class="container mt-5">
-                            <h3 class="mb-4">Event Statistics</h3>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <canvas id="attendeesChart"></canvas>
-                                </div>
-                                <div class="col-md-6">
-                                    <canvas id="ratingsChart"></canvas>
-                                </div>
-                            </div>
-                            <h3 class="mt-5 mb-4">Event Report</h3>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Event Title</th>
-                                        <th>Max Attendees</th>
-                                        <th>Attendee Count</th>
-                                        <th>Average Rating</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% eventStats.forEach(event => { %>
-                                    <tr>
-                                        <td><%= event.title %></td>
-                                        <td><%= event.maxAttendees %></td>
-                                        <td><%= event.attendeeCount %></td>
-                                        <td><%= event.avgRating %>/5</td>
-                                    </tr>
-                                    <% }); %>
-                                </tbody>
-                            </table>
-                        </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-6 chart-container">
+                        <h4>Age Distribution</h4>
+                        <canvas id="ageChart" class="chart-canvas"></canvas>
+                    </div>
+                    <div class="col-md-6 chart-container">
+                        <h4>Gender Distribution</h4>
+                        <canvas id="genderChart" class="chart-canvas"></canvas>
                     </div>
                 </div>
-                <button id="print-btn" class="btn btn-dark w-25">Print Report</button>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6 chart-container">
+                        <h4>RSVP's And Attendees</h4>
+                        <canvas id="provinceChart" class="chart-canvas"></canvas>
+                    </div>
+                    <div class="col-md-6 chart-container">
+                        <h4>Average Event Ratings</h4>
+                        <canvas id="ratingChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-
-<!-- Hidden script elements to store event data -->
-<script type="application/json" id="eventTitles"><%- JSON.stringify(eventStats.map(e => e.title)) %></script>
-<script type="application/json" id="attendeeCounts"><%- JSON.stringify(eventStats.map(e => e.attendeeCount)) %></script>
-<script type="application/json" id="maxAttendees"><%- JSON.stringify(eventStats.map(e => e.maxAttendees)) %></script>
-<script type="application/json" id="avgRatings"><%- JSON.stringify(eventStats.map(e => e.avgRating)) %></script>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="../../scripts/eventStats.js"></script>
-<script src="../../scripts/print-report.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Use <%- %> to prevent EJS from escaping the JSON
+        const ageData = JSON.parse('<%- JSON.stringify(ageDistribution) %>');
+        const genderData = JSON.parse('<%- JSON.stringify(genderDistribution) %>');
+        const provinceData = JSON.parse('<%- JSON.stringify(eventsByProvince) %>');
+        const ratingData = parseFloat('<%- averageRatings %>') || 0;
+
+        console.log("Age Data:", ageData);
+        console.log("Gender Data:", genderData);
+        console.log("Province Data:", provinceData);
+        console.log("Average Ratings:", ratingData);
+
+        // Expanded color palette
+        const colors = [
+            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', 
+            '#E7E9ED', '#8C9EFF', '#00CC99', '#FF99CC', '#66FF66', '#FF6666'
+        ];
+
+        const isEmpty = (data) => Object.keys(data).length === 0;
+
+        // Age Chart
+        if (!isEmpty(ageData)) {
+            new Chart(document.getElementById('ageChart'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(ageData),
+                    datasets: [{
+                        label: 'Users by Age Group',
+                        data: Object.values(ageData),
+                        backgroundColor: colors.slice(0, Object.keys(ageData).length),
+                    }]
+                }
+            });
+        }
+
+        // Gender Chart
+        if (!isEmpty(genderData)) {
+            new Chart(document.getElementById('genderChart'), {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(genderData),
+                    datasets: [{
+                        label: 'Users by Gender',
+                        data: Object.values(genderData),
+                        backgroundColor: colors.slice(0, Object.keys(genderData).length),
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Allow chart to resize
+                    plugins: {
+                        legend: {
+                            position: 'bottom', // Move legend to the bottom
+                        }
+                    }
+                }
+            });
+        }
+
+        // Province Chart
+        if (!isEmpty(provinceData)) {
+            const provinces = Object.keys(provinceData);
+            const totalRSVPs = provinces.map(province => provinceData[province].totalRSVPs);
+            const totalMaxAttendees = provinces.map(province => provinceData[province].totalMaxAttendees);
+
+            new Chart(document.getElementById('provinceChart'), {
+                type: 'bar',
+                data: {
+                    labels: provinces,
+                    datasets: [
+                        {
+                            label: 'Total RSVPs',
+                            data: totalRSVPs,
+                            backgroundColor: '#36A2EB', // Blue for RSVPs
+                        },
+                        {
+                            label: 'Max Attendees',
+                            data: totalMaxAttendees,
+                            backgroundColor: '#FFCE56', // Yellow for Max Attendees
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            stacked: true, // Bars are stacked
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Max Attendees / Number of RSVPs'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom', // Move legend to the bottom
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => {
+                                    const label = context.dataset.label || '';
+                                    const value = context.raw || 0;
+                                    return `${label}: ${value}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Ratings Chart
+        new Chart(document.getElementById('ratingChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Average Rating', 'Remaining'],
+                datasets: [{
+                    label: 'Average Event Rating',
+                    data: [ratingData, 5 - ratingData],
+                    backgroundColor: [colors[0], colors[4]],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Allow chart to resize
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => context.raw.toFixed(1) + ' / 5'
+                        }
+                    },
+                    legend: {
+                        position: 'bottom', // Move legend to the bottom
+                    }
+                }
+            }
+        });
+
+        document.getElementById('print-btn').addEventListener('click', () => window.print());
+    });
+</script>
 
 <%- include('../partials/footer') %>

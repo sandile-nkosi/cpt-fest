@@ -40,6 +40,13 @@
                                     <label for="fullName">Full Name*</label>
                                 </div>
                             </div>
+                            <!-- Display Name -->
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input name="displayName" type="text" id="displayName" class="form-control" placeholder="Display Name*" required value="<%=sessionData.displayName%>">
+                                    <label for="displayName">Display Name*</label>
+                                </div>
+                            </div>
 
                             <!-- Email -->
                             <div class="col-12">
@@ -49,11 +56,55 @@
                                 </div>
                             </div>
 
-                            <!-- City -->
+                            <!-- Age -->
                             <div class="col-12">
                                 <div class="form-floating">
-                                    <input name="city" type="text" id="city" class="form-control" placeholder="City*" required value="<%=sessionData.city%>">
-                                    <label for="city">City*</label>
+                                    <select name="age" id="age" class="form-control" required>
+                                        <option value="">Select Age Range*</option>
+                                        <option value="Under 18" <%= sessionData.age === 'Under 18' ? 'selected' : '' %>>Under 18</option>
+                                        <option value="18-24" <%= sessionData.age === '18-24' ? 'selected' : '' %>>18-24</option>
+                                        <option value="25-34" <%= sessionData.age === '25-34' ? 'selected' : '' %>>25-34</option>
+                                        <option value="35-44" <%= sessionData.age === '35-44' ? 'selected' : '' %>>35-44</option>
+                                        <option value="45-54" <%= sessionData.age === '45-54' ? 'selected' : '' %>>45-54</option>
+                                        <option value="55-64" <%= sessionData.age === '55-64' ? 'selected' : '' %>>55-64</option>
+                                        <option value="65+" <%= sessionData.age === '65+' ? 'selected' : '' %>>65+</option>
+                                        <option value="Prefer not to say" <%= sessionData.age === 'Prefer not to say' ? 'selected' : '' %>>Prefer not to say</option>
+                                    </select>
+                                    <label for="age">Age Range*</label>
+                                </div>
+                            </div>
+
+                            <!-- Gender -->
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <select name="gender" id="gender" class="form-control" required>
+                                        <option value="">Select Gender*</option>
+                                        <option value="Female" <%= sessionData.gender === 'Female' ? 'selected' : '' %>>Female</option>
+                                        <option value="Male" <%= sessionData.gender === 'Male' ? 'selected' : '' %>>Male</option>
+                                        <option value="Non-binary" <%= sessionData.gender === 'Non-binary' ? 'selected' : '' %>>Non-binary</option>
+                                        <option value="Other" <%= sessionData.gender === 'Other' ? 'selected' : '' %>>Other</option>
+                                        <option value="Prefer not to say" <%= sessionData.gender === 'Prefer not to say' ? 'selected' : '' %>>Prefer not to say</option>
+                                    </select>
+                                    <label for="gender">Gender*</label>
+                                </div>
+                            </div>
+
+                            <!-- Province -->
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <select name="province" id="province" class="form-control" required>
+                                        <option value="">Select Province*</option>
+                                        <option value="Eastern Cape" <%= sessionData.province === 'Eastern Cape' ? 'selected' : '' %>>Eastern Cape</option>
+                                        <option value="Free State" <%= sessionData.province === 'Free State' ? 'selected' : '' %>>Free State</option>
+                                        <option value="Gauteng" <%= sessionData.province === 'Gauteng' ? 'selected' : '' %>>Gauteng</option>
+                                        <option value="KwaZulu-Natal" <%= sessionData.province === 'KwaZulu-Natal' ? 'selected' : '' %>>KwaZulu-Natal</option>
+                                        <option value="Limpopo" <%= sessionData.province === 'Limpopo' ? 'selected' : '' %>>Limpopo</option>
+                                        <option value="Mpumalanga" <%= sessionData.province === 'Mpumalanga' ? 'selected' : '' %>>Mpumalanga</option>
+                                        <option value="North West" <%= sessionData.province === 'North West' ? 'selected' : '' %>>North West</option>
+                                        <option value="Northern Cape" <%= sessionData.province === 'Northern Cape' ? 'selected' : '' %>>Northern Cape</option>
+                                        <option value="Western Cape" <%= sessionData.province === 'Western Cape' ? 'selected' : '' %>>Western Cape</option>
+                                    </select>
+                                    <label for="province">Province*</label>
                                 </div>
                             </div>
 

@@ -6,7 +6,7 @@
     <div class="main-banner">
         <div class="container">
             <div class="main-content text-center text-white py-5">
-                <h3>Hot events in Cape Town right now!</h3>
+                <h3>Trending Event</h3>
                 <% singleEvents.forEach(singleEvent => { %>
                     <h4><%= singleEvent.title %></h4>
                     <a class="event-button btn btn-primary mt-3" href="/user/events/<%= singleEvent._id %>">Check it out</a>
@@ -33,10 +33,6 @@
                             <a href="/user/events/<%= event._id %>">
                                 <img src="<%= event.imageUrl %>" class="d-block w-100" alt="<%= event.title %>">
                             </a>
-                            <div class="carousel-caption d-none d-md-block">
-                                <h5><%= event.title %></h5>
-                                <p><%= event.description %></p>
-                            </div>
                         </div>
                     <% }); %>
                 </div>
@@ -54,21 +50,11 @@
         </div>
     </div>
 
-    <!-- *** Venues & Tickets *** -->
-    <div class="venue-tickets">
-        <div class="container">
-            <div class="section-heading">
-                <h2>Some of our Events</h2>
-            </div>
-        </div>
-    </div>
 
     <!-- *** Coming Events *** -->
     <div class="coming-events">
         <div class="container">
-            <div class="discover-more">
-                <a class="event-button" href="/user/events">Discover More</a>
-            </div>
+            <h3 id="hot-events">Check out hot events in Cape Town below!</h3>
             <div class="events-grid">
                 <% limitedEvents.forEach(limitedEvent => { %>
                     <div class="event-card">
@@ -80,6 +66,9 @@
                         <p><i class="fa fa-map-marker"></i> <%= limitedEvent.location %></p>
                     </div>
                 <% }); %>
+            </div>
+            <div class="discover-more">
+                <a class="event-button" href="/user/events">Discover More</a>
             </div>
         </div>
     </div>

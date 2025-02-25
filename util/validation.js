@@ -13,12 +13,18 @@ function isEmpty(value) {
     email,
     password,
     fullName,
-    city,
+    displayName,
+    age,
+    gender,
+    province
   ) {
     return (
       userCredentialsValid(email, password) &&
       !isEmpty(fullName) &&
-      !isEmpty(city)
+      !isEmpty(displayName) &&
+      !isEmpty(age) &&
+      !isEmpty(gender) &&
+      !isEmpty(province)
     );
   }
   
