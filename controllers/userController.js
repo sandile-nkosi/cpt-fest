@@ -197,7 +197,7 @@ async function toggleRSVP(req, res) {
                   If this was a mistake or you change your mind, you can RSVP again while spots are still available.
                 </p>
           
-                <a href="localhost:3000/user/events/${eventId}" style="display: inline-block; padding: 12px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; font-size: 16px; margin-top: 10px;">
+                <a href="https://cpt-fest.onrender.com/user/events/${eventId}" style="display: inline-block; padding: 12px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; font-size: 16px; margin-top: 10px;">
                   RSVP Again
                 </a>
           
@@ -265,7 +265,7 @@ async function toggleRSVP(req, res) {
             If you have any questions, feel free to reply to this email.
         </p>
 
-        <a href="localhost:3000/user/events/${eventId}" style="display: inline-block; padding: 12px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; font-size: 16px; margin-top: 10px;">
+        <a href="https://cpt-fest.onrender.com/user/events/${eventId}" style="display: inline-block; padding: 12px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; font-size: 16px; margin-top: 10px;">
             View Event Details
         </a>
 
