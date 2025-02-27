@@ -6,11 +6,9 @@
     <div class="main-banner">
         <div class="container">
             <div class="main-content text-center text-white py-5">
-                <h3>Trending Event</h3>
-                <% singleEvents.forEach(singleEvent => { %>
+                <h3>Latest Event</h3>
                     <h4><%= singleEvent.title %></h4>
                     <a class="event-button btn btn-primary mt-3" href="/user/events/<%= singleEvent._id %>">Check it out</a>
-                <% }) %> 
             </div>
         </div>
     </div>
@@ -56,14 +54,14 @@
         <div class="container">
             <h3 id="hot-events">Check out hot events in Cape Town below!</h3>
             <div class="events-grid">
-                <% limitedEvents.forEach(limitedEvent => { %>
+                <% topEvents .forEach(topEvent  => { %>
                     <div class="event-card">
-                        <a href="/user/events/<%= limitedEvent._id %>">
-                            <img src="<%= limitedEvent.imageUrl %>" alt="<%= limitedEvent.title %>">
-                            <h4><%= limitedEvent.title %></h4>
+                        <a href="/user/events/<%= topEvent._id %>">
+                            <img src="<%= topEvent.imageUrl %>" alt="<%= topEvent.title %>">
+                            <h4><%= topEvent.title %></h4>
                         </a>
-                        <p><i class="fa fa-clock-o"></i> <%= limitedEvent.eventDateTime %></p>
-                        <p><i class="fa fa-map-marker"></i> <%= limitedEvent.location %></p>
+                        <p><i class="fa fa-clock-o"></i> <%= topEvent.eventDateTime %></p>
+                        <p><i class="fa fa-map-marker"></i> <%= topEvent.location %></p>
                     </div>
                 <% }); %>
             </div>

@@ -60,12 +60,14 @@
                     <ul class="list-unstyled">
                         <% event.ratings.forEach(rating => { %>
                             <li class="mb-3">
+                                <strong class="text-dark">@<%= rating.user.displayName %> <em class="text-muted time-ago" data-time="<%= rating.createdAt.toISOString() %>">Just now</em></strong>
+                                <br>
+                                <strong class="text-dark"><%= rating.comment %></strong>
+                                <br>
                                 <strong class="text-dark">Rating:</strong> <%= rating.rating %> ⭐
                                 <br>
-                                <strong class="text-dark">Comment:</strong> <%= rating.comment %>
-                                <br>
-                                <em class="text-muted"><%= new Date(rating.createdAt).toLocaleString() %></em>
-                            </li>
+                                
+                              </li>
                             <hr>
                         <% }); %>
                     </ul>
@@ -128,34 +130,7 @@
 
 <!-- jQuery -->
 <script src="../../scripts/jquery-2.1.0.min.js"></script>
+<script src="../../scripts/event-details.js"></script>
 
-<script>
-    $(document).ready(function() {
-        $(".btn").on("click", function() {
-            const button = $(this);
-            const eventId = button.data("event-id");
-            const isRSVPed = button.data("rsvped"); // Boolean status
-
-            $.ajax({
-                url: `/user/events/${eventId}/rsvp`,
-                method: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({ action: isRSVPed ? "cancel" : "rsvp" }), // Send correct action
-                success: function(response) {
-                    if (response.isRSVPed) {
-                        button.text("Cancel RSVP").data("rsvped", true);
-                        alert("You have successfully RSVP'd to the event!");
-                    } else {
-                        button.text("Click to RSVP").data("rsvped", false);
-                        alert("You have successfully canceled your RSVP.");
-                    }
-                },
-                error: function(xhr) {
-                    alert("Error: " + xhr.responseText);
-                }
-            });
-        });
-    });
-</script>
 
 <%- include('../partials/footer') %>

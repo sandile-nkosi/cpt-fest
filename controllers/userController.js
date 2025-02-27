@@ -58,58 +58,63 @@ async function getEvent(req, res) {
     const userId = req.session.user ? req.session.user.uid : null; // Check if user is logged in
     const eventId = req.params.eventId; // Get eventId from the request parameters
 
-    const user = userId ? await User.findById(userId).exec() : null; // Fetch user if logged in
-    res.locals.user = user; // Available in all views
+    // Fetch user if logged in
+    const user = userId ? await User.findById(userId).exec() : null;
+    res.locals.user = user; // Make user available in all views
 
-    const event = await Event.findById(eventId).exec(); // Fetch the event by ID
-    if (!event) {
-      return res.status(404).send("Event not found"); // Handle event not found scenario
-    }
+    // Fetch the event by ID and populate ratings.user
+    const event = await Event.findById(eventId).populate("ratings.user").exec();
+    if (!event) return res.status(404).send("Event not found");
 
     // Format the event date
     event.formattedDate = new Date(event.eventDate).toDateString();
 
-    // Calculate average rating
+    // Calculate average rating (1 decimal place)
     const calculateAverageRating = (ratings) => {
-      if (ratings.length === 0) return 0;
+      if (!ratings.length) return 0;
       const sum = ratings.reduce((total, r) => total + r.rating, 0);
-      return (sum / ratings.length).toFixed(1); // Round to 1 decimal place
+      return (sum / ratings.length).toFixed(1);
     };
     event.averageRating = calculateAverageRating(event.ratings);
+
+    // Add ISO-formatted timestamps for dynamic "time ago"
+    event.ratings.forEach((rating) => {
+      rating.createdAtISO = rating.createdAt.toISOString();
+    });
 
     // Check if user has RSVP'd
     const isRSVPed = user ? event.rsvps.includes(userId) : false;
 
-    // Fetch future weather forecast
-    const weatherApiKey = process.env.OPENWEATHER_API_KEY;
-    const weatherUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${event.latitude}&lon=${event.longitude}&units=metric&appid=${weatherApiKey}`;
-
+    // Fetch future weather forecast (if coordinates exist)
     let weatherDetails = null;
-    try {
-      const response = await axios.get(weatherUrl);
-      const forecastData = response.data.list;
+    if (event.latitude && event.longitude) {
+      const weatherApiKey = process.env.OPENWEATHER_API_KEY;
+      const weatherUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${event.latitude}&lon=${event.longitude}&units=metric&appid=${weatherApiKey}`;
 
-      // Convert event date & time to a timestamp
-      const eventDateTime = new Date(`${event.eventDate}T${event.eventTime}`).getTime();
+      try {
+        const response = await axios.get(weatherUrl);
+        const forecastData = response.data.list;
 
-      // Find the closest forecast to the event's time
-      let closestForecast = forecastData.reduce((closest, forecast) => {
-        let forecastTime = new Date(forecast.dt * 1000).getTime();
-        return Math.abs(forecastTime - eventDateTime) < Math.abs(new Date(closest.dt * 1000).getTime() - eventDateTime)
-          ? forecast
-          : closest;
-      }, forecastData[0]);
+        // Match forecast closest to event time
+        const eventDateTime = new Date(`${event.eventDate}T${event.eventTime}`).getTime();
+        const closestForecast = forecastData.reduce((closest, forecast) => {
+          let forecastTime = new Date(forecast.dt * 1000).getTime();
+          return Math.abs(forecastTime - eventDateTime) < Math.abs(new Date(closest.dt * 1000).getTime() - eventDateTime)
+            ? forecast
+            : closest;
+        }, forecastData[0]);
 
-      // Extract weather details
-      weatherDetails = {
-        temperature: closestForecast.main.temp + "°C",
-        condition: closestForecast.weather[0].description,
-        windSpeed: closestForecast.wind.speed + " m/s",
-        humidity: closestForecast.main.humidity + "%",
-        icon: `https://openweathermap.org/img/wn/${closestForecast.weather[0].icon}.png`,
-      };
-    } catch (error) {
-      console.error("Error fetching weather data:", error);
+        // Extract weather details
+        weatherDetails = {
+          temperature: `${closestForecast.main.temp}°C`,
+          condition: closestForecast.weather[0].description,
+          windSpeed: `${closestForecast.wind.speed} m/s`,
+          humidity: `${closestForecast.main.humidity}%`,
+          icon: `https://openweathermap.org/img/wn/${closestForecast.weather[0].icon}.png`,
+        };
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
+      }
     }
 
     // Render event details with weather
@@ -125,6 +130,7 @@ async function getEvent(req, res) {
     res.status(500).send("Internal Server Error");
   }
 }
+
 
 async function toggleRSVP(req, res) {
   const userId = req.session.user ? req.session.user.uid : null;
