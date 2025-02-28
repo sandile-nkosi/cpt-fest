@@ -13,10 +13,17 @@ async function getDashboard(req, res) {
     return res.redirect("/auth/admin/signin");
   }
 
-  const admin = await Admin.findById(adminId).exec();   
+  const admin = await Admin.findById(adminId).exec();
+  const { range = "30" } = req.query; // Default to last 30 days
+
+  const dateLimit = range === "all" ? new Date(0) : new Date(Date.now() - parseInt(range) * 24 * 60 * 60 * 1000);
 
   const users = await User.find();
-  const events = await Event.find({ isArchived: false })
+
+  const events = await Event.find({
+    isArchived: false,
+    updatedAt: { $gte: dateLimit },
+  })
     .populate("rsvps", "fullName email")
     .populate("ratings.user", "fullName email");
 
@@ -32,31 +39,36 @@ async function getDashboard(req, res) {
     return acc;
   }, {});
 
-  // Events by Province (Total RSVPs and Max Attendees)
+  // Events by Province
   const provinceData = await Event.aggregate([
     {
+      $match: {
+        updatedAt: { $gte: dateLimit },
+        isArchived: false,
+      },
+    },
+    {
       $group: {
-        _id: "$title", // Group by province (assuming `location` stores the province)
-        totalRSVPs: { $sum: { $size: "$rsvps" } }, // Sum the number of RSVPs
-        totalMaxAttendees: { $sum: "$maxAttendees" } // Sum the maxAttendees
-      }
+        _id: "$location",
+        totalRSVPs: { $sum: { $size: "$rsvps" } },
+        totalMaxAttendees: { $sum: "$maxAttendees" },
+      },
     },
     {
       $project: {
         province: "$_id",
         totalRSVPs: 1,
         totalMaxAttendees: 1,
-        _id: 0 // Exclude the default _id field
-      }
-    }
+        _id: 0,
+      },
+    },
   ]);
 
-  // Convert the array of objects into a single object keyed by province
   const eventsByProvince = {};
-  provinceData.forEach(province => {
+  provinceData.forEach((province) => {
     eventsByProvince[province.province] = {
       totalRSVPs: province.totalRSVPs,
-      totalMaxAttendees: province.totalMaxAttendees
+      totalMaxAttendees: province.totalMaxAttendees,
     };
   });
 
@@ -75,14 +87,18 @@ async function getDashboard(req, res) {
       ).toFixed(1)
     : 0;
 
+  // ✅ Pass `range` to the template
   res.render("admin/dashboard", {
     admin,
     ageDistribution,
     genderDistribution,
     eventsByProvince,
     averageRatings,
+    range, // Pass range here
   });
 }
+
+
 
 
 

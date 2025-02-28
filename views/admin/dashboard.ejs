@@ -1,39 +1,97 @@
 <%- include('../partials/header', { pageTitle: 'One City Events', styles: '../css/styles.css', event: '../css/event.css'}) %>
+<link rel="stylesheet" href="../css/dashboard.css">
 
-<div class="tickets-page">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="heading">
-                    <h2>Admin Dashboard</h2>
-                </div>
-                <div class="row mt-4">
-                    <div class="col-md-6 chart-container">
-                        <h4>Age Distribution</h4>
-                        <canvas id="ageChart" class="chart-canvas"></canvas>
-                    </div>
-                    <div class="col-md-6 chart-container">
-                        <h4>Gender Distribution</h4>
-                        <canvas id="genderChart" class="chart-canvas"></canvas>
-                    </div>
-                </div>
-                
-                <div class="row mt-4">
-                    <div class="col-md-6 chart-container">
-                        <h4>RSVP's And Attendees</h4>
-                        <canvas id="provinceChart" class="chart-canvas"></canvas>
-                    </div>
-                    <div class="col-md-6 chart-container">
-                        <h4>Average Event Ratings</h4>
-                        <canvas id="ratingChart" class="chart-canvas"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="admin-dashboard">
+  <div class="container">
+    <div class="dashboard-header">
+      <h2>Admin Dashboard</h2>
+      <p>Event analytics and insights</p>
     </div>
+    
+    <div class="dashboard-actions">
+        <div class="date-filter">
+            <select class="form-select" id="date-range">
+              <option value="7" <%= range == '7' ? 'selected' : '' %>>Last 7 Days</option>
+              <option value="30" <%= range == '30' ? 'selected' : '' %>>Last 30 Days</option>
+              <option value="90" <%= range == '90' ? 'selected' : '' %>>Last 90 Days</option>
+              <option value="all" <%= range == 'all' ? 'selected' : '' %>>All Time</option>
+            </select>
+          </div>          
+      <button id="print-btn" class="btn-dashboard">
+        <i class="fas fa-print"></i> Export Data
+      </button>
+    </div>
+    
+    <div class="row">
+      <div class="col-lg-3 col-md-6">
+        <div class="dashboard-summary">
+          <div class="summary-stat">
+            <div class="summary-value" id="total-events">0</div>
+            <div class="summary-label">Total Events</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="dashboard-summary">
+          <div class="summary-stat">
+            <div class="summary-value" id="total-rsvps">0</div>
+            <div class="summary-label">Total RSVPs</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="dashboard-summary">
+          <div class="summary-stat">
+            <div class="summary-value" id="avg-rating">0</div>
+            <div class="summary-label">Avg. Rating</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="dashboard-summary">
+          <div class="summary-stat">
+            <div class="summary-value" id="active-users">0</div>
+            <div class="summary-label">Active Users</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <div class="chart-container">
+          <h4>Age Distribution</h4>
+          <canvas id="ageChart" class="chart-canvas"></canvas>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="chart-container">
+          <h4>Gender Distribution</h4>
+          <canvas id="genderChart" class="chart-canvas"></canvas>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <div class="chart-container">
+          <h4>RSVPs & Max Attendees</h4>
+          <canvas id="provinceChart" class="chart-canvas"></canvas>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="chart-container">
+          <h4>Average Event Ratings</h4>
+          <canvas id="ratingChart" class="chart-canvas"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Fixed Font Awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         // Use <%- %> to prevent EJS from escaping the JSON
@@ -47,13 +105,38 @@
         console.log("Province Data:", provinceData);
         console.log("Average Ratings:", ratingData);
 
-        // Expanded color palette
-        const colors = [
-            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', 
-            '#E7E9ED', '#8C9EFF', '#00CC99', '#FF99CC', '#66FF66', '#FF6666'
-        ];
-
+        // Define isEmpty function first
         const isEmpty = (data) => Object.keys(data).length === 0;
+
+        // Update summary values
+        document.getElementById('avg-rating').textContent = ratingData.toFixed(1);
+        
+        // Calculate total RSVPs
+        let totalRSVPs = 0;
+        if (!isEmpty(provinceData)) {
+            Object.keys(provinceData).forEach(province => {
+                totalRSVPs += provinceData[province].totalRSVPs;
+            });
+        }
+        document.getElementById('total-rsvps').textContent = totalRSVPs;
+        
+        // Calculate total users (from age distribution)
+        let totalUsers = 0;
+        if (!isEmpty(ageData)) {
+            Object.values(ageData).forEach(count => {
+                totalUsers += count;
+            });
+        }
+        document.getElementById('active-users').textContent = totalUsers;
+        
+        // Total events (number of provinces with events)
+        document.getElementById('total-events').textContent = Object.keys(provinceData).length;
+
+        // Modern color palette
+        const colors = [
+            '#3498db', '#2ecc71', '#f1c40f', '#e74c3c', '#9b59b6', 
+            '#1abc9c', '#34495e', '#d35400', '#16a085', '#8e44ad'
+        ];
 
         // Age Chart
         if (!isEmpty(ageData)) {
@@ -65,7 +148,32 @@
                         label: 'Users by Age Group',
                         data: Object.values(ageData),
                         backgroundColor: colors.slice(0, Object.keys(ageData).length),
+                        borderRadius: 6,
+                        maxBarThickness: 40
                     }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                display: true,
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
                 }
             });
         }
@@ -80,16 +188,22 @@
                         label: 'Users by Gender',
                         data: Object.values(genderData),
                         backgroundColor: colors.slice(0, Object.keys(genderData).length),
+                        borderWidth: 0
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false, // Allow chart to resize
+                    maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: 'bottom', // Move legend to the bottom
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                boxWidth: 12
+                            }
                         }
-                    }
+                    },
+                    cutout: '40%'
                 }
             });
         }
@@ -108,12 +222,16 @@
                         {
                             label: 'Total RSVPs',
                             data: totalRSVPs,
-                            backgroundColor: '#36A2EB', // Blue for RSVPs
+                            backgroundColor: '#3498db',
+                            borderRadius: 6,
+                            maxBarThickness: 40
                         },
                         {
                             label: 'Max Attendees',
                             data: totalMaxAttendees,
-                            backgroundColor: '#FFCE56', // Yellow for Max Attendees
+                            backgroundColor: '#2ecc71',
+                            borderRadius: 6,
+                            maxBarThickness: 40
                         }
                     ]
                 },
@@ -122,27 +240,30 @@
                     maintainAspectRatio: false,
                     scales: {
                         x: {
-                            stacked: true, // Bars are stacked
+                            grid: {
+                                display: false
+                            }
                         },
                         y: {
                             beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
                             title: {
                                 display: true,
-                                text: 'Max Attendees / Number of RSVPs'
+                                text: 'Count',
+                                font: {
+                                    size: 12
+                                }
                             }
                         }
                     },
                     plugins: {
                         legend: {
-                            position: 'bottom', // Move legend to the bottom
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: (context) => {
-                                    const label = context.dataset.label || '';
-                                    const value = context.raw || 0;
-                                    return `${label}: ${value}`;
-                                }
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                boxWidth: 12
                             }
                         }
                     }
@@ -154,26 +275,32 @@
         new Chart(document.getElementById('ratingChart'), {
             type: 'doughnut',
             data: {
-                labels: ['Average Rating', 'Remaining'],
+                labels: ['Average Rating'],
                 datasets: [{
-                    label: 'Average Event Rating',
                     data: [ratingData, 5 - ratingData],
-                    backgroundColor: [colors[0], colors[4]],
+                    backgroundColor: ['#f1c40f', '#ecf0f1'],
+                    borderWidth: 0
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false, // Allow chart to resize
+                maintainAspectRatio: false,
                 plugins: {
                     tooltip: {
                         callbacks: {
-                            label: (context) => context.raw.toFixed(1) + ' / 5'
+                            label: (context) => {
+                                if (context.dataIndex === 0) {
+                                    return context.raw.toFixed(1) + ' / 5';
+                                }
+                                return '';
+                            }
                         }
                     },
                     legend: {
-                        position: 'bottom', // Move legend to the bottom
+                        display: false
                     }
-                }
+                },
+                cutout: '70%'
             }
         });
 

@@ -20,6 +20,7 @@
   "homepage": "https://github.com/sandile-nkosi/ventpass#readme",
   "description": "",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.7.2",
     "@tailwindcss/cli": "^4.0.4",
     "axios": "^1.7.9",
     "bcrypt": "^5.1.1",

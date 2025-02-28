@@ -1,0 +1,188 @@
+/* Page Layout for Sticky Footer */
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure full viewport height */
+}
+
+.admin-dashboard {
+    flex: 1; /* Allows dashboard to grow and push footer down */
+    padding: 2rem 0;
+    background-color: #f8f9fa;
+}
+
+/* Footer Styling */
+.footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    font-size: 0.9rem;
+}
+
+.footer a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* Dashboard Header */
+.dashboard-header {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 1rem;
+}
+
+.dashboard-header h2 {
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-header p {
+    color: #6c757d;
+    font-size: 1rem;
+}
+
+/* Chart Container */
+.chart-container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    height: 300px;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.chart-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container h4 {
+    color: #2c3e50;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.chart-canvas {
+    width: 100% !important;
+    height: calc(100% - 40px) !important;
+}
+
+/* Dashboard Actions */
+.dashboard-actions {
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#print-btn, .btn-dashboard {
+    background-color: #3498db;
+    border: none;
+    color: white !important;
+    padding: 0.5rem 1.2rem;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+#print-btn:hover, .btn-dashboard:hover {
+    background-color: #2980b9;
+}
+
+#print-btn i, .btn-dashboard i {
+    margin-right: 0.5rem;
+}
+
+/* Dashboard Summary */
+.dashboard-summary {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-summary:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.summary-value {
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    margin-bottom: 0.5rem !important;
+    display: block !important;
+}
+
+.summary-label {
+    color: #6c757d !important;
+    font-size: 0.9rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    font-weight: 500 !important;
+    display: block !important;
+}
+
+#total-events {
+    color: #3498db !important;
+}
+
+#total-rsvps {
+    color: #2ecc71 !important;
+}
+
+#avg-rating {
+    color: #f1c40f !important;
+}
+
+#active-users {
+    color: #9b59b6 !important;
+}
+
+.form-select, #date-range {
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    font-size: 0.9rem;
+    width: 200px;
+}
+
+@media (max-width: 768px) {
+    .chart-container {
+        height: 250px;
+    }
+
+    .dashboard-summary {
+        min-height: 100px;
+    }
+
+    .summary-value {
+        font-size: 1.8rem !important;
+    }
+}
